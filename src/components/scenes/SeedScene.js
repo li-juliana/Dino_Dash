@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import * as Dat from 'dat.gui';
 import { Scene, Color } from 'three';
-import { Flower, Land, Parrot, Trex} from 'objects';
+import { Flower, Land, Parrot, Trex, Cactus1, Cactus2} from 'objects';
 import { BasicLights } from 'lights';
 
 class SeedScene extends Scene {
@@ -37,10 +37,14 @@ class SeedScene extends Scene {
         // const parrot = new Parrot(this);
         // this.add(parrot)
 
-        // Add in a box as an obstacle for now
-        var cactus = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), new THREE.MeshStandardMaterial({color: 0x013220}));
-        cactus.position.x = 2;
-        this.add(cactus);
+        // Add in an obstacle for now
+        var cactus1 = new Cactus1(this);
+        cactus1.position.z = 5;
+        this.add(cactus1);
+
+        var cactus2 = new Cactus2(this);
+        cactus2.position.z = 5;
+        this.add(cactus2);
     }
 
     addToUpdateList(object) {
