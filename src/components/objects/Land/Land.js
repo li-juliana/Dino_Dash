@@ -14,6 +14,12 @@ class Land extends Group {
         loader.load(MODEL, (gltf) => {
             this.add(gltf.scene);
         });
+
+        this.scale.x = 2;
+        this.scale.z = 10;
+
+        this.position.y = -1;
+        this.position.z = 5;
     }
 }
 

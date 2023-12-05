@@ -1,3 +1,4 @@
+import * as THREE from "three";
 import * as Dat from 'dat.gui';
 import { Scene, Color } from 'three';
 import { Flower, Land, Parrot} from 'objects';
@@ -11,22 +12,30 @@ class SeedScene extends Scene {
         // Init state
         this.state = {
             gui: new Dat.GUI(), // Create GUI for scene
-            rotationSpeed: 1,
+            rotationSpeed: 0, // TODO: change back to 1 later
             updateList: [],
         };
+
+        // Populate GUI
+        this.state.gui.add(this.state, 'rotationSpeed', -5, 5);
 
         // Set background to a nice color
         this.background = new Color(0x7ec0ee);
 
-        // Add meshes to scene
-        const land = new Land();
+        /******************** Add Meshes to Scene *********************/
+        // Add flower and lights
         const flower = new Flower(this);
         const lights = new BasicLights();
-        const parrot = new Parrot(this);
-        this.add(land, lights);
+        this.add(lights, flower);
+        flower.position.y = -1;
 
-        // Populate GUI
-        this.state.gui.add(this.state, 'rotationSpeed', -5, 5);
+        // Add floor
+        var floor = new Land();
+        this.add(floor);
+
+        // Add parrot
+        const parrot = new Parrot(this);
+        this.add(parrot)
     }
 
     addToUpdateList(object) {
