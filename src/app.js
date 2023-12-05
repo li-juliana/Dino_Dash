@@ -9,17 +9,18 @@
 import { WebGLRenderer, PerspectiveCamera, Vector3 } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { SeedScene } from 'scenes';
+import * as event_handlers from './js/EventHandlers.js';
 
-// Initialize core ThreeJS components
+/***************** Initialize core ThreeJS components *****************/
 const scene = new SeedScene();
 const camera = new PerspectiveCamera();
 const renderer = new WebGLRenderer({ antialias: true });
 
-// Set up camera
+/********************* Set Up Camera **********************************/
 camera.position.set(6, 3, -10);
 camera.lookAt(new Vector3(0, 0, 0));
 
-// Set up renderer, canvas, and minor CSS adjustments
+/*********** Set up renderer, canvas, and minor CSS adjustments *******/
 renderer.setPixelRatio(window.devicePixelRatio);
 const canvas = renderer.domElement;
 canvas.style.display = 'block'; // Removes padding below canvas
@@ -27,7 +28,7 @@ document.body.style.margin = 0; // Removes margin around page
 document.body.style.overflow = 'hidden'; // Fix scrolling
 document.body.appendChild(canvas);
 
-// Set up controls
+/********************* Set Up Controls ********************************/
 const controls = new OrbitControls(camera, canvas);
 controls.enableDamping = true;
 controls.enablePan = false;
@@ -35,16 +36,17 @@ controls.minDistance = 4;
 controls.maxDistance = 16;
 controls.update();
 
-// Render loop
+/*********************** Render loop **********************************/
 const onAnimationFrameHandler = (timeStamp) => {
     controls.update();
     renderer.render(scene, camera);
     scene.update && scene.update(timeStamp);
     window.requestAnimationFrame(onAnimationFrameHandler);
+    event_handlers.handleMovement(scene);
 };
 window.requestAnimationFrame(onAnimationFrameHandler);
 
-// Resize Handler
+/*********************** Resize Handler *******************************/
 const windowResizeHandler = () => {
     const { innerHeight, innerWidth } = window;
     renderer.setSize(innerWidth, innerHeight);
@@ -52,4 +54,9 @@ const windowResizeHandler = () => {
     camera.updateProjectionMatrix();
 };
 windowResizeHandler();
+
+/*********************** Event Handlers *******************************/
 window.addEventListener('resize', windowResizeHandler, false);
+window.addEventListener('keydown', event_handlers.handleKeyDown, false);
+window.addEventListener('keyup', event_handlers.handleKeyUp, false);
+
