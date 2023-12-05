@@ -59,7 +59,7 @@ export function handleKeyUp(event){
 
 /******************** Handle Character Movements **********************/
 export function handleMovement(scene){
-    var player = scene.getObjectByName("flower");
+    var player = scene.getObjectByName("Trex");
     // Movement along the x-axis
     if(keys.left.pressed){
         player.position.x += 0.1;
