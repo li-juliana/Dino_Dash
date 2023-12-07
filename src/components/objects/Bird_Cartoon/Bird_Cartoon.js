@@ -36,7 +36,6 @@ class Bird_Cartoon extends Group {
         // TODO: Fix positioning
         this.position.z = 5;
         this.position.y = 0;
-        this.position.x = -5;
 
         // Rotate the bird to face the dinosaur
         this.rotation.y = 180 * Math.PI / 180;

@@ -55,7 +55,7 @@ class Trex_Cartoon extends Group {
         // TWEEN.update();
 
         // Update animation
-        var delta = (timeStamp - this.state.prev_timestamp) / 400;
+        var delta = (timeStamp - this.state.prev_timestamp) / 180;
         if (this.state.mixer){
             this.state.mixer.update(delta);
         }

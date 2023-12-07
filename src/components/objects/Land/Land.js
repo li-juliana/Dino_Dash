@@ -11,11 +11,22 @@ class Land extends Group {
 
         this.name = 'Land';
 
+        // Init state
+        this.state = {
+            ground_x_left_bound: null,
+            ground_x_right_bound: null,
+            ground_y: null,
+        };
+
         loader.load(MODEL, (gltf) => {
             this.add(gltf.scene);
         });
 
-        this.scale.x = 2;
+        // Set dimensions of land
+        this.ground_x_left_bound = -1.5;
+        this.ground_x_right_bound = 1.5;
+        this.ground_y = -1;
+        this.scale.x = Math.abs(this.ground_x_left_bound - this.ground_x_right_bound);
         this.scale.z = 100;
 
         this.position.y = -1;

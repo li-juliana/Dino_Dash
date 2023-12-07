@@ -50,7 +50,7 @@ class Trex_Original extends Group {
         // TWEEN.update();
 
         // Update animation
-        var delta = (timeStamp - this.state.prev_timestamp) / 650;
+        var delta = (timeStamp - this.state.prev_timestamp) / 600;
         if (this.state.mixer){
             this.state.mixer.update(delta);
         }

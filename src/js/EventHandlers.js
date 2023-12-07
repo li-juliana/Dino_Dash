@@ -84,8 +84,10 @@ export function handleMovement(scene){
     
     // // Movement along the x-axis
     // if(keys.left.pressed){
+    //     // Only move left if still on the land
     //     player.position.x += 0.03;
     // } else if (keys.right.pressed){
+    //     // Only move right if still on the land
     //     player.position.x -= 0.03;
     // } 
     
