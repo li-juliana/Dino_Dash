@@ -1,7 +1,10 @@
-import * as THREE from "three";
 import * as Dat from 'dat.gui';
 import { Scene, Color } from 'three';
-import { Flower, Land, Parrot, Trex, Cactus1, Cactus2} from 'objects';
+import { TWEEN } from 'three/examples/jsm/libs/tween.module.min.js';
+import { Flower, Land} from 'objects';
+// Game Assets
+import { Bird_Cartoon, Bird_Original, Bird_Realistic} from 'objects'; // Birds
+import { Trex_Cartoon, Trex_Original, Trex_Realistic} from 'objects'; // dinosaurs
 import { BasicLights } from 'lights';
 
 class SeedScene extends Scene {
@@ -14,6 +17,7 @@ class SeedScene extends Scene {
             gui: new Dat.GUI(), // Create GUI for scene
             rotationSpeed: 0, // TODO: change back to 1 later
             updateList: [],
+            prev_timestamp: null,
         };
 
         // Populate GUI
@@ -26,25 +30,26 @@ class SeedScene extends Scene {
         
         // Add dinosaur and lights
         const lights = new BasicLights();
-        var dinosaur = new Trex(this);
-        this.add(lights, dinosaur);
+        // var dino_original = new Trex_Original(this);
+        var dino_realistic = new Trex_Realistic(this);
+        var dino_original = new Trex_Original(this);
+        var dino_cartoon = new Trex_Cartoon(this);
+        this.add(lights, dino_original);
+
+        // Add bird dinosaur
+        const bird_cartoon = new Bird_Cartoon(this);
+        const bird_original = new Bird_Original(this);
+        const bird_realistic = new Bird_Realistic(this);
+        this.add(bird_original);
 
         // Add floor
         var floor = new Land();
-        this.add(floor);
-
-        // Add parrot
-        // const parrot = new Parrot(this);
-        // this.add(parrot)
+        this.add(lights, floor);
 
         // Add in an obstacle for now
-        var cactus1 = new Cactus1(this);
-        cactus1.position.z = 5;
-        this.add(cactus1);
-
-        var cactus2 = new Cactus2(this);
-        cactus2.position.z = 5;
-        this.add(cactus2);
+        // var cactus1 = new Cactus1(this);
+        // cactus1.position.z = 5;
+        // this.add(cactus1);
     }
 
     addToUpdateList(object) {
@@ -54,7 +59,6 @@ class SeedScene extends Scene {
     update(timeStamp) {
         const { rotationSpeed, updateList } = this.state;
         this.rotation.y = (rotationSpeed * timeStamp) / 10000;
-
         // Call update for each object in the updateList
         for (const obj of updateList) {
             obj.update(timeStamp);
