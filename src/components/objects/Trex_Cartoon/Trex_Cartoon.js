@@ -1,4 +1,4 @@
-import { Group, AnimationMixer, AnimationClip} from 'three';
+import { Group, AnimationMixer, AnimationClip, Box3} from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { TWEEN } from 'three/examples/jsm/libs/tween.module.min.js';
 import MODEL from './Trex_Cartoon.glb';
@@ -12,6 +12,7 @@ class Trex_Cartoon extends Group {
         this.state = {
             mixer: null,
             prev_timestamp: null,
+            box: null,
         };
 
         this.name = 'Trex_Cartoon';
@@ -22,6 +23,7 @@ class Trex_Cartoon extends Group {
         // is licensed under Creative Commons Attribution
         loader.load(MODEL, (gltf) => {
             this.add(gltf.scene);
+            this.state.box = new Box3().setFromObject(gltf.scene);
             const mixer = new AnimationMixer(gltf.scene);
             var dino_walk = AnimationClip.findByName(gltf.animations, 'animation_0');
             const action = mixer.clipAction(dino_walk);

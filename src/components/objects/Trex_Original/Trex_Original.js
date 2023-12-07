@@ -1,4 +1,4 @@
-import { Group, AnimationMixer, AnimationClip} from 'three';
+import { Group, AnimationMixer, AnimationClip, Box3} from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { TWEEN } from 'three/examples/jsm/libs/tween.module.min.js';
 import MODEL from './Trex_Original.gltf';
@@ -12,6 +12,7 @@ class Trex_Original extends Group {
         this.state = {
             mixer: null,
             prev_timestamp: null,
+            box: null,
         };
 
         this.name = 'Trex_Original';
@@ -22,6 +23,7 @@ class Trex_Original extends Group {
         // and is licensed under Creative Commons Attribution
         loader.load(MODEL, (gltf) => {
             this.add(gltf.scene);
+            this.state.box = new Box3().setFromObject(gltf.scene);
             const mixer = new AnimationMixer(gltf.scene);
             var dino_walk = AnimationClip.findByName(gltf.animations, 'chrome dino run');
             const action = mixer.clipAction(dino_walk);
@@ -33,6 +35,7 @@ class Trex_Original extends Group {
         // TODO: Adjust positioning and renderer.camera position to be 
         // better suited for playing
         this.position.y = -1;
+        this.position.z = -2;
 
         // Rotate dinosaur to face forward
         this.rotation.y = 180 * Math.PI / 180;
