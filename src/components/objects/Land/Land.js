@@ -13,8 +13,6 @@ class Land extends Group {
 
         // Init state
         this.state = {
-            ground_x_left_bound: null,
-            ground_x_right_bound: null,
             ground_y: null,
         };
 
@@ -23,10 +21,8 @@ class Land extends Group {
         });
 
         // Set dimensions of land
-        this.ground_x_left_bound = -1.5;
-        this.ground_x_right_bound = 1.5;
         this.ground_y = -1;
-        this.scale.x = Math.abs(this.ground_x_left_bound - this.ground_x_right_bound);
+        this.scale.x = 3;
         this.scale.z = 100;
 
         this.position.y = -1;

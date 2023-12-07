@@ -1,6 +1,5 @@
 import * as Dat from 'dat.gui';
 import { Scene, Color } from 'three';
-import { TWEEN } from 'three/examples/jsm/libs/tween.module.min.js';
 import { Flower, Land} from 'objects';
 // Game Assets
 import { Bird_Cartoon, Bird_Original, Bird_Realistic} from 'objects'; // Birds
@@ -20,8 +19,10 @@ class SeedScene extends Scene {
             prev_timestamp: null,
             style: "Original",
             current_style: "Original",
+            land: null,
             available_players: [],
             available_obstacles: [],
+            obstacles: [],
         };
 
         // Populate GUI
@@ -37,6 +38,7 @@ class SeedScene extends Scene {
         // Add floor and lights
         const lights = new BasicLights();
         var floor = new Land();
+        this.land = floor;
         this.add(lights, floor);
 
         // Add dinosaur
@@ -46,17 +48,13 @@ class SeedScene extends Scene {
         this.state.available_players.push(dino_original, dino_cartoon, dino_realistic);
         this.add(dino_original)
 
-        // Add bird dinosaur
+        // Add bird dinosaur obstacles
         const bird_original = new Bird_Original(this);
         const bird_cartoon = new Bird_Cartoon(this);
         const bird_realistic = new Bird_Realistic(this);
         this.state.available_obstacles.push(bird_original, bird_cartoon, bird_realistic);
         this.add(bird_original);
-
-        // Add in an obstacle for now
-        // var cactus1 = new Cactus1(this);
-        // cactus1.position.z = 5;
-        // this.add(cactus1);
+        this.state.obstacles.push(bird_original);
     }
 
     addToUpdateList(object) {
@@ -69,6 +67,19 @@ class SeedScene extends Scene {
         // Call update for each object in the updateList
         for (const obj of updateList) {
             obj.update(timeStamp);
+        }
+
+        var player = this.getObjectByName("Trex_" + this.state.style);
+        // Add obstacles to the scene
+        for (var obstacle of this.state.obstacles){
+            if (this.detectCollision(player, obstacle)){
+                console.log("Collision");
+            }
+        }
+
+        // Move obstacles forward
+        for (var obstacle of this.state.obstacles){
+            obstacle.position.z -= 0.05;
         }
     }
 
@@ -115,6 +126,13 @@ class SeedScene extends Scene {
         });
         
         this.state.current_style = style;
+    }
+
+    detectCollision(player, obstacle){
+        const player_box = player.state.box;
+        if (player_box != null){
+            return player_box.containsPoint(obstacle.position);
+        }
     }
 }
 
