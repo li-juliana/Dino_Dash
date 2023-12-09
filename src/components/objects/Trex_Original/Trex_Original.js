@@ -50,7 +50,7 @@ class Trex_Original extends Group {
         }
 
         // Advance tween animations (jumping)
-        // TWEEN.update();
+        TWEEN.update();
 
         // Update animation
         var delta = (timeStamp - this.state.prev_timestamp) / 600;
