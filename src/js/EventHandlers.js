@@ -100,10 +100,6 @@ export function handleMovement(scene){
     
     // Movement along the y-axis
     // Only jump if the dinosaur is on floor (prevents floating)
-    if(keys.jump.pressed){
-        console.log("jump")
-    }
-
     if (keys.jump.pressed && player.position.y == floor_y){
         jumpUp.onComplete(() => fallDown.start());
         jumpUp.start();
