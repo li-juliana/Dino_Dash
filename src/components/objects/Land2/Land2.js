@@ -1,15 +1,15 @@
 import { Group } from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-import MODEL from './land.gltf';
+import MODEL from './Land2.glb';
 
-class Land extends Group {
+class Land2 extends Group {
     constructor() {
         // Call parent Group() constructor
         super();
 
         const loader = new GLTFLoader();
 
-        this.name = 'Land';
+        this.name = 'Land2';
 
         // Init state
         this.state = {
@@ -22,7 +22,7 @@ class Land extends Group {
 
         // Set dimensions of land
         this.ground_y = -1;
-        this.scale.x = 100;
+        this.scale.x = 2;
         this.scale.z = 1000;
 
         this.position.y = -1;
@@ -30,4 +30,4 @@ class Land extends Group {
     }
 }
 
-export default Land;
+export default Land2;

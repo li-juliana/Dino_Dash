@@ -77,33 +77,31 @@ export function handleKeyUp(event){
 export function handleMovement(scene){
     var player_name = "Trex_" + scene.state.style;
     const player = scene.getObjectByName(player_name);
-    const land = scene.getObjectByName("Land");
-    const floor_y = land.position.y;
+    let land = scene.getObjectByName("Land2");
+    let offset = 1;
+
+    var floor_y = land.position.y;
     // TODO: Modify transition objects and jump height to allow dino to jump over obstacles
-    const jumpUp = new TWEEN.Tween(player.position).to({ y: floor_y + 3 }, 250 ).easing(TWEEN.Easing.Quadratic.Out);
+    const jumpUp = new TWEEN.Tween(player.position).to({ y: floor_y + 3 }, 200 ).easing(TWEEN.Easing.Quadratic.Out);
     const fallDown = new TWEEN.Tween(player.position).to({ y: floor_y}, 400).easing(TWEEN.Easing.Quadratic.In);
-    const jumpUpCartoon = new TWEEN.Tween(player.position).to({ y: -0.4 + 3 }, 250 ).easing(TWEEN.Easing.Quadratic.Out);
+    const jumpUpCartoon = new TWEEN.Tween(player.position).to({ y: -0.4 + 3 }, 200 ).easing(TWEEN.Easing.Quadratic.Out);
     const fallDownCartoon = new TWEEN.Tween(player.position).to({ y: -0.4}, 400).easing(TWEEN.Easing.Quadratic.In);
     
     // Movement along the x-axis
     if(keys.left.pressed){
         // Only move left if still on the land
-        if (player.position.x + 0.03 <= land.scale.x + 1.5){
-            player.position.x += 0.03;   
+        if (player.position.x + 0.05 <= land.scale.x + offset){
+            player.position.x += 0.05;   
         }
     } else if (keys.right.pressed){
         // Only move right if still on the land
-        if (player.position.x - 0.03 >= -1 * land.scale.x - 1.5){
-            player.position.x -= 0.03;   
+        if (player.position.x - 0.05 >= -1 * land.scale.x - offset){
+            player.position.x -= 0.05;   
         }
     } 
     
     // Movement along the y-axis
     // Only jump if the dinosaur is on floor (prevents floating)
-    if(keys.jump.pressed){
-        console.log("jump")
-    }
-
     if (keys.jump.pressed && player.position.y == floor_y){
         jumpUp.onComplete(() => fallDown.start());
         jumpUp.start();

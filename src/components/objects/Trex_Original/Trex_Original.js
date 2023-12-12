@@ -35,7 +35,7 @@ class Trex_Original extends Group {
         // TODO: Adjust positioning and renderer.camera position to be 
         // better suited for playing
         this.position.y = -1;
-        this.position.z = -2;
+        this.position.z = -4;
 
         // Rotate dinosaur to face forward
         this.rotation.y = 180 * Math.PI / 180;

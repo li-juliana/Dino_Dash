@@ -29,9 +29,9 @@ class Bird_Cartoon extends Group {
         });
 
         // Adjust size of bird
-        this.scale.x = 0.03;
-        this.scale.y = 0.03;
-        this.scale.z = 0.03;
+        this.scale.x = 0.02;
+        this.scale.y = 0.02;
+        this.scale.z = 0.02;
 
         // TODO: Fix positioning
         this.position.z = 5;

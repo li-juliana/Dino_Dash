@@ -35,6 +35,7 @@ class Trex_Cartoon extends Group {
         // TODO: Adjust positioning and renderer.camera position to be 
         // better suited for playing
         this.position.y = -0.4;
+        this.position.z = -4;
 
         // Adjust size of dinosaur
         this.scale.x = 0.35;

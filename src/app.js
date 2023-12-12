@@ -18,8 +18,8 @@ const renderer = new WebGLRenderer({ antialias: true });
 
 /********************* Set Up Camera **********************************/
 // TODO: fix camera position and perspective to improve player performance
-camera.position.set(-1.5, 3, -6);
-camera.lookAt(new Vector3(0, 0, 1));
+camera.position.set(-3, 3, -10);
+camera.lookAt(new Vector3(0, 0, 5));
 
 /*********** Set up renderer, canvas, and minor CSS adjustments *******/
 renderer.setPixelRatio(window.devicePixelRatio);

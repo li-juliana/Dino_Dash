@@ -31,9 +31,9 @@ class Bird_Original extends Group {
         });
 
         // Adjust size of bird
-        this.scale.x = 1.25;
-        this.scale.y = 1.25;
-        this.scale.z = 1.25;
+        this.scale.x = 1;
+        this.scale.y = 1;
+        this.scale.z = 1;
 
         // TODO: Fix positioning
         this.position.z = 5;

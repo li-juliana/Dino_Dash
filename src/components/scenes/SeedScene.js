@@ -1,9 +1,11 @@
 import * as Dat from 'dat.gui';
-import { Scene, Color } from 'three';
-import { Flower, Land} from 'objects';
+import * as THREE from 'three';
+import { Scene, Color, FogExp2} from 'three';
+import { Land, Land2 } from 'objects';
 // Game Assets
-import { Bird_Cartoon, Bird_Original, Bird_Realistic} from 'objects'; // Birds
-import { Trex_Cartoon, Trex_Original, Trex_Realistic} from 'objects'; // dinosaurs
+import { Bird_Cartoon, Bird_Original, Bird_Realistic } from 'objects'; // Birds
+import { Trex_Cartoon, Trex_Original, Trex_Realistic } from 'objects'; // Dinosaurs
+import { Cloud } from 'objects'; // Scenery
 import { BasicLights } from 'lights';
 
 class SeedScene extends Scene {
@@ -19,10 +21,11 @@ class SeedScene extends Scene {
             prev_timestamp: null,
             style: "Original",
             current_style: "Original",
-            land: null,
             available_players: [],
             available_obstacles: [],
             obstacles: [],
+            clouds: [],
+            speed: null,
         };
 
         // Populate GUI
@@ -32,14 +35,17 @@ class SeedScene extends Scene {
         // Set background to a nice color
         this.background = new Color(0x7ec0ee);
 
+        this.state.speed = 0.1;
+
         /******************** Add Meshes to Scene *********************/
         player_style.onChange((value) => this.switchStyles(value));
 
         // Add floor and lights
         const lights = new BasicLights();
-        var floor = new Land();
-        this.land = floor;
+        var floor = new Land2();
         this.add(lights, floor);
+
+        this.createScenery();
 
         // Add dinosaur
         var dino_original = new Trex_Original(this);
@@ -55,6 +61,30 @@ class SeedScene extends Scene {
         this.state.available_obstacles.push(bird_original, bird_cartoon, bird_realistic);
         this.add(bird_original);
         this.state.obstacles.push(bird_original);
+    }
+
+    createScenery(){
+        // Add scene right
+        var scene_right = new Land();
+        scene_right.position.x = -175;
+        this.add(scene_right);
+
+        // Add scene left
+        var scene_left = new Land();
+        scene_left.position.x = 175;
+        this.add(scene_left);
+
+        // Add clouds to sky
+        for (var x = 0; x < 500; x++){
+            var cloud = new Cloud();
+            var scale = (Math.random() * 1.5) + 0.25;
+            cloud.scale.multiplyScalar(scale);
+            cloud.position.x = (Math.random() * 500) - 250;
+            cloud.position.y += (Math.random() * 15) - 10;
+            cloud.position.z = (Math.random() * 1000) - 500;
+            this.state.clouds.push(cloud);
+            this.add(cloud);
+        }
     }
 
     addToUpdateList(object) {
@@ -79,7 +109,7 @@ class SeedScene extends Scene {
 
         // Move obstacles forward
         for (var obstacle of this.state.obstacles){
-            obstacle.position.z -= 0.05;
+            obstacle.position.z -= this.state.speed;
         }
     }
 
