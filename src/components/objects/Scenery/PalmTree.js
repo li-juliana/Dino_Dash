@@ -1,24 +1,26 @@
 import { Group } from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-import MODEL from './Grass3.glb';
+import MODEL from './PalmTree.glb';
 
-class Grass3 extends Group {
+class PalmTree extends Group {
     constructor() {
         // Call parent Group() constructor
         super();
 
         const loader = new GLTFLoader();
 
-        this.name = 'Grass3';
+        this.name = 'PalmTree';
 
         loader.load(MODEL, (gltf) => {
             this.add(gltf.scene);
         });
 
         this.position.y = -1;
-        this.scale.x = 3;
-        this.scale.y = 5;
+        this.scale.x = 4;
+        this.scale.y = 4;
+        this.scale.z = 4;
+        this.rotation.y = -Math.PI / 2;
     }
 }
 
-export default Grass3;
+export default PalmTree;

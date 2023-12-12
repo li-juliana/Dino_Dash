@@ -16,8 +16,8 @@ class Grass2 extends Group {
         });
 
         this.position.y = -1;
-        this.scale.x = 3;
-        this.scale.y = 3;
+        this.scale.x = 4;
+        this.scale.y = 4;
     }
 }
 

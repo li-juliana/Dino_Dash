@@ -1,15 +1,15 @@
 import { Group } from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-import MODEL from './Bush2.glb';
+import MODEL from './Cactus1.glb';
 
-class Bush2 extends Group {
+class Cactus1 extends Group {
     constructor() {
         // Call parent Group() constructor
         super();
 
         const loader = new GLTFLoader();
 
-        this.name = 'Bush2';
+        this.name = 'Cactus1';
 
         loader.load(MODEL, (gltf) => {
             this.add(gltf.scene);
@@ -19,7 +19,9 @@ class Bush2 extends Group {
         this.scale.y = 2;
         this.scale.x = 2;
         this.scale.z = 2;
+
+        this.rotation.y = -Math.PI/2;
     }
 }
 
-export default Bush2;
+export default Cactus1;

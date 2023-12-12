@@ -5,7 +5,7 @@ import { Land, Land2 } from 'objects';
 // Game Assets
 import { Bird_Cartoon, Bird_Original, Bird_Realistic } from 'objects'; // Birds
 import { Trex_Cartoon, Trex_Original, Trex_Realistic } from 'objects'; // Dinosaurs
-import { Cloud, Tree1, Tree4, Rock1, Grass2, Grass3, Bush1, Bush2 } from 'objects'; // Scenery
+import { Cloud, Tree1, PalmTree, Rock1, Rock2, Grass2, Bush1, Cactus1 } from 'objects'; // Scenery
 import { BasicLights } from 'lights';
 
 class SeedScene extends Scene {
@@ -21,11 +21,12 @@ class SeedScene extends Scene {
             prev_timestamp: null,
             style: "Original",
             current_style: "Original",
-            available_players: [],
+            player_options: [],
             available_obstacles: [],
             obstacles: [],
-            scenery: [],
-            available_scenery: null,
+            scenery_left: [],
+            scenery_right: [],
+            scenery_options: null,
             clouds: [],
             speed: null,
         };
@@ -38,9 +39,9 @@ class SeedScene extends Scene {
         this.background = new Color(0x7ec0ee);
 
         // Add available scenery options
-        this.state.available_scenery = ["Tree1", "Tree4", "Rock1", "Grass2", "Grass3", "Bush1", "Bush2"];
+        this.state.scenery_options = ["Tree1", "Tree4",  "Rock1",  "Rock2", "Grass2", "Bush1", "Cactus1"];
 
-        this.state.speed = 0.1;
+        this.state.speed = 1;
 
         /******************** Add Meshes to Scene *********************/
         player_style.onChange((value) => this.switchStyles(value));
@@ -50,13 +51,29 @@ class SeedScene extends Scene {
         var floor = new Land2();
         this.add(lights, floor);
 
-        this.createScenery();
+        // Add scene right and left
+        var scene_right = new Land();
+        scene_right.position.x = -175;
+        var scene_left = new Land();
+        scene_left.position.x = 175;
+        this.add(scene_right, scene_left);
+
+        // Add items to scene right
+        for (var j = 0; j < 100; j++){
+            this.loadScenery("right", 0);
+            this.loadScenery("left", 0);
+        }
+
+        // Add clouds to sky
+        for (var i = 0; i < 250; i++){
+            this.loadCloud(0);
+        }
 
         // Add dinosaur
         var dino_original = new Trex_Original(this);
         var dino_cartoon = new Trex_Cartoon(this);
         var dino_realistic = new Trex_Realistic(this);
-        this.state.available_players.push(dino_original, dino_cartoon, dino_realistic);
+        this.state.player_options.push(dino_original, dino_cartoon, dino_realistic);
         this.add(dino_original)
 
         // Add bird dinosaur obstacles
@@ -68,93 +85,82 @@ class SeedScene extends Scene {
         this.state.obstacles.push(bird_original);
     }
 
-    createScenery(){
-        // Add scene right
-        var scene_right = new Land();
-        scene_right.position.x = -175;
-        this.add(scene_right);
+    loadCloud(offset){
+        var cloud = new Cloud();
+        var scale = (Math.random() * 1.5) + 0.25;
+        cloud.scale.multiplyScalar(scale);
+        cloud.position.x = (Math.random() * 500) - 250;
+        cloud.position.y += (Math.random() * 15) - 10;
+        cloud.position.z = (Math.random() * 1000) - 100 + offset;
+        this.state.clouds.push(cloud);
+        this.add(cloud);
+    }
 
-        // Add items to scene right
-        for (var j = 0; j < 125; j++){
-            var select = Math.floor(Math.random() * 7);
-            let item;
-            switch(this.state.available_scenery[select]) {
-                case "Tree1":
-                    item = new Tree1();
-                    break;
-                case "Tree4":
-                    item = new Tree4();
-                    break;
-                case "Rock1":
-                    item = new Rock1();
-                    break;
-                case "Grass2":
-                    item = new Grass2();
-                    break;
-                case "Grass3":
-                    item = new Grass3();
-                    break;
-                case "Bush1":
-                    item = new Bush1();
-                    break;
-                case "Bush2":
-                    item = new Bush2();
-                    break;
-            }
-            item.position.x = (Math.random() * -100) - 5;
-            item.position.z = (Math.random() * 1000) - 500;
-            this.add(item);
-            this.state.scenery.push(item);
+    loadScenery(side, offset){
+        var select = Math.floor(Math.random() * 7);
+        let item;
+        switch(this.state.scenery_options[select]) {
+            case "Tree1":
+                item = new Tree1();
+                break;
+            case "Tree4":
+                item = new PalmTree();
+                break;
+            case "Rock1":
+                item = new Rock1();
+                break;
+            case "Rock2":
+                item = new Rock2();
+                break;
+            case "Grass2":
+                item = new Grass2();
+                break;
+            case "Bush1":
+                item = new Bush1();
+                break;
+            case "Cactus1":
+                item = new Cactus1();
+                break;
         }
 
-        // Add scene left
-        var scene_left = new Land();
-        scene_left.position.x = 175;
-        this.add(scene_left);
-
-        // Add items to scene left
-        for (var j = 0; j < 125; j++){
-            var select = Math.floor(Math.random() * 7);
-            let item;
-            switch(this.state.available_scenery[select]) {
-                case "Tree1":
-                    item = new Tree1();
-                    break;
-                case "Tree4":
-                    item = new Tree4();
-                    break;
-                case "Rock1":
-                    item = new Rock1();
-                    break;
-                case "Grass2":
-                    item = new Grass2();
-                    break;
-                case "Grass3":
-                    item = new Grass3();
-                    break;
-                case "Bush1":
-                    item = new Bush1();
-                    break;
-                case "Bush2":
-                    item = new Bush2();
-                    break;
-            }
-            item.position.x = (Math.random() * 100) + 6;
-            item.position.z = (Math.random() * 1000) - 500;
-            this.add(item);
-            this.state.scenery.push(item);
+        // Adjust position and add to respective list
+        item.position.z = (Math.random() * 1000) - 100 + offset;
+        if (side == "left"){
+            item.position.x = (Math.random() * 200) + 5;
+            this.state.scenery_left.push(item);
+        } else {
+            item.position.x = (Math.random() * -200) - 5;
+            this.state.scenery_right.push(item);
         }
+        // Add item to scene
+        this.add(item);
+    }
 
-        // Add clouds to sky
-        for (var i = 0; i < 500; i++){
-            var cloud = new Cloud();
-            var scale = (Math.random() * 1.5) + 0.25;
-            cloud.scale.multiplyScalar(scale);
-            cloud.position.x = (Math.random() * 500) - 250;
-            cloud.position.y += (Math.random() * 15) - 10;
-            cloud.position.z = (Math.random() * 1000) - 500;
-            this.state.clouds.push(cloud);
-            this.add(cloud);
+    loadNewScenery(array_obj, type, side, offset){
+        // Remove from update array once object has moved out of scene enough
+        if (array_obj != null){
+            var count_removed = 0;
+            for (var i = array_obj.length - 1; i >= 0; i--) {
+                // Dinosaur player is located at z = -4
+                if (array_obj[i].position.z < -50) {
+                    // Remove from scene
+                    this.remove(array_obj[i]);
+                    array_obj.splice(i, 1);
+                    count_removed += 1;
+                }
+            }
+
+            for (var i = 0; i < count_removed; i++){
+                if (type == "clouds"){
+                    this.loadCloud(offset);
+                } else {
+                    if (side == "left"){
+                        this.loadScenery("left", offset);
+                    } else {
+                        this.loadScenery("right", offset);
+                    }
+                }
+            }
         }
     }
 
@@ -185,12 +191,21 @@ class SeedScene extends Scene {
         }
         // Move clouds forward
         for (var cloud of this.state.clouds){
-            cloud.position.z -= (this.state.speed * 2);
+            cloud.position.z -= (this.state.speed);
         }
-        // Move scenery forward
-        for (var item of this.state.scenery){
-            item.position.z -= (this.state.speed * 2);
+        // Move scenery left forward
+        for (var item of this.state.scenery_left){
+            item.position.z -= (this.state.speed);
         }
+        // Move scenery right forward
+        for (var item of this.state.scenery_right){
+            item.position.z -= (this.state.speed);
+        }
+
+        /***************** Add new items to scene *********************/
+        this.loadNewScenery(this.state.clouds, "clouds", null, 50);
+        this.loadNewScenery(this.state.scenery_left, "scenery", "left", 50);
+        this.loadNewScenery(this.state.scenery_right, "scenery", "right", 50);
     }
 
     switchStyles(style){
@@ -222,7 +237,7 @@ class SeedScene extends Scene {
         }
         
         // Add desired player to scene
-        this.state.available_players.forEach(element => {
+        this.state.player_options.forEach(element => {
             if (element.name == desired_player){
                 this.add(element);
             }
