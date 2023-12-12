@@ -32,8 +32,6 @@ class Trex_Original extends Group {
             this.state.mixer = mixer;
         });
 
-        // TODO: Adjust positioning and renderer.camera position to be 
-        // better suited for playing
         this.position.y = -1;
         this.position.z = -4;
 

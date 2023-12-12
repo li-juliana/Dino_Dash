@@ -9,6 +9,9 @@ import { Cloud, Tree1, PalmTree, Rock1, Rock2, Grass2, Bush1, Cactus1 } from 'ob
 import { BasicLights } from 'lights';
 
 class SeedScene extends Scene {
+     /*
+     * Load initial scene and intiial settings
+     */
     constructor() {
         // Call parent Scene() constructor
         super();
@@ -41,7 +44,7 @@ class SeedScene extends Scene {
         // Add available scenery options
         this.state.scenery_options = ["Tree1", "Tree4",  "Rock1",  "Rock2", "Grass2", "Bush1", "Cactus1"];
 
-        this.state.speed = 1;
+        this.state.speed = 0.5;
 
         /******************** Add Meshes to Scene *********************/
         player_style.onChange((value) => this.switchStyles(value));
@@ -85,6 +88,11 @@ class SeedScene extends Scene {
         this.state.obstacles.push(bird_original);
     }
 
+    /**
+     * Loads in a singular cloud into the scene at some random position.
+     * Adds cloud to scene and adds new cloud to this.state.clouds array
+     * @param {!int} additional offset along the z-axis
+     */
     loadCloud(offset){
         var cloud = new Cloud();
         var scale = (Math.random() * 1.5) + 0.25;
@@ -96,6 +104,15 @@ class SeedScene extends Scene {
         this.add(cloud);
     }
 
+    /**
+     * Loads in a random scenery item (tree1, tree4, rock1, rock2, 
+     * grass2, bush1, or cactus1) at a random position on either the
+     * left or right side of the scene. Adds new scenery item to 
+     * scene and to either this.state.scenery_left or 
+     * this.state.scenery_right array
+     * @param {!string} side is either "left" or "right"
+     * @param {!int} additional offset along the z-axis
+     */
     loadScenery(side, offset){
         var select = Math.floor(Math.random() * 7);
         let item;
@@ -123,7 +140,7 @@ class SeedScene extends Scene {
                 break;
         }
 
-        // Adjust position and add to respective list
+        // Adjust position and add to respective array
         item.position.z = (Math.random() * 1000) - 100 + offset;
         if (side == "left"){
             item.position.x = (Math.random() * 200) + 5;
@@ -136,6 +153,18 @@ class SeedScene extends Scene {
         this.add(item);
     }
 
+    /**
+     * Removes a background item from the scene and update arrays if the
+     * item has left the scene. If an item is removed, a new item is 
+     * added further along in the scene to create a continuous scene.
+     * Call this function in the update function.
+     * @param {!array} Array to be modified. Specify if this.state.clouds,
+     * this.state.scenery_left or this.state.scenery_right
+     * @param {!string} type of object being added. Specify if "scenery"
+     * or "clouds"
+     * @param {!string} "left" or "right" side if adding a scenery item
+     * @param {!int} additional z-offset
+     */
     loadNewScenery(array_obj, type, side, offset){
         // Remove from update array once object has moved out of scene enough
         if (array_obj != null){
@@ -202,7 +231,7 @@ class SeedScene extends Scene {
             item.position.z -= (this.state.speed);
         }
 
-        /***************** Add new items to scene *********************/
+        /*********** Remove items and add new items to scene **********/
         this.loadNewScenery(this.state.clouds, "clouds", null, 50);
         this.loadNewScenery(this.state.scenery_left, "scenery", "left", 50);
         this.loadNewScenery(this.state.scenery_right, "scenery", "right", 50);
@@ -253,6 +282,13 @@ class SeedScene extends Scene {
         this.state.current_style = style;
     }
 
+    /**
+     * Returns true if there was a collision between player and obstacle 
+     * @param {!mesh obj} player (dinosaur)
+     * @param {!mesh obj} obstacle (bird or cactus)
+     * @return {!boolean} whether or not there was a collision between player
+     * and obstacle
+     */
     detectCollision(player, obstacle){
         const player_box = player.state.box;
         if (player_box != null){

@@ -17,7 +17,6 @@ const camera = new PerspectiveCamera();
 const renderer = new WebGLRenderer({ antialias: true });
 
 /********************* Set Up Camera **********************************/
-// TODO: fix camera position and perspective to improve player performance
 camera.position.set(-3, 3, -10);
 camera.lookAt(new Vector3(0, 0, 5));
 
