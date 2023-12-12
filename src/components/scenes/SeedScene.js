@@ -5,7 +5,7 @@ import { Land, Land2 } from 'objects';
 // Game Assets
 import { Bird_Cartoon, Bird_Original, Bird_Realistic } from 'objects'; // Birds
 import { Trex_Cartoon, Trex_Original, Trex_Realistic } from 'objects'; // Dinosaurs
-import { Cloud } from 'objects'; // Scenery
+import { Cloud, Tree1, Tree4, Rock1, Grass2, Grass3, Bush1, Bush2 } from 'objects'; // Scenery
 import { BasicLights } from 'lights';
 
 class SeedScene extends Scene {
@@ -24,6 +24,8 @@ class SeedScene extends Scene {
             available_players: [],
             available_obstacles: [],
             obstacles: [],
+            scenery: [],
+            available_scenery: null,
             clouds: [],
             speed: null,
         };
@@ -34,6 +36,9 @@ class SeedScene extends Scene {
 
         // Set background to a nice color
         this.background = new Color(0x7ec0ee);
+
+        // Add available scenery options
+        this.state.available_scenery = ["Tree1", "Tree4", "Rock1", "Grass2", "Grass3", "Bush1", "Bush2"];
 
         this.state.speed = 0.1;
 
@@ -69,13 +74,79 @@ class SeedScene extends Scene {
         scene_right.position.x = -175;
         this.add(scene_right);
 
+        // Add items to scene right
+        for (var j = 0; j < 125; j++){
+            var select = Math.floor(Math.random() * 7);
+            let item;
+            switch(this.state.available_scenery[select]) {
+                case "Tree1":
+                    item = new Tree1();
+                    break;
+                case "Tree4":
+                    item = new Tree4();
+                    break;
+                case "Rock1":
+                    item = new Rock1();
+                    break;
+                case "Grass2":
+                    item = new Grass2();
+                    break;
+                case "Grass3":
+                    item = new Grass3();
+                    break;
+                case "Bush1":
+                    item = new Bush1();
+                    break;
+                case "Bush2":
+                    item = new Bush2();
+                    break;
+            }
+            item.position.x = (Math.random() * -100) - 5;
+            item.position.z = (Math.random() * 1000) - 500;
+            this.add(item);
+            this.state.scenery.push(item);
+        }
+
         // Add scene left
         var scene_left = new Land();
         scene_left.position.x = 175;
         this.add(scene_left);
 
+        // Add items to scene left
+        for (var j = 0; j < 125; j++){
+            var select = Math.floor(Math.random() * 7);
+            let item;
+            switch(this.state.available_scenery[select]) {
+                case "Tree1":
+                    item = new Tree1();
+                    break;
+                case "Tree4":
+                    item = new Tree4();
+                    break;
+                case "Rock1":
+                    item = new Rock1();
+                    break;
+                case "Grass2":
+                    item = new Grass2();
+                    break;
+                case "Grass3":
+                    item = new Grass3();
+                    break;
+                case "Bush1":
+                    item = new Bush1();
+                    break;
+                case "Bush2":
+                    item = new Bush2();
+                    break;
+            }
+            item.position.x = (Math.random() * 100) + 6;
+            item.position.z = (Math.random() * 1000) - 500;
+            this.add(item);
+            this.state.scenery.push(item);
+        }
+
         // Add clouds to sky
-        for (var x = 0; x < 500; x++){
+        for (var i = 0; i < 500; i++){
             var cloud = new Cloud();
             var scale = (Math.random() * 1.5) + 0.25;
             cloud.scale.multiplyScalar(scale);
@@ -107,10 +178,18 @@ class SeedScene extends Scene {
             }
         }
 
+        /********************* Move Scene Forward *********************/
         // Move obstacles forward
         for (var obstacle of this.state.obstacles){
             obstacle.position.z -= this.state.speed;
-            // need to move clouds forward
+        }
+        // Move clouds forward
+        for (var cloud of this.state.clouds){
+            cloud.position.z -= (this.state.speed * 2);
+        }
+        // Move scenery forward
+        for (var item of this.state.scenery){
+            item.position.z -= (this.state.speed * 2);
         }
     }
 

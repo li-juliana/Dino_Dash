@@ -2,6 +2,7 @@ export * from './Flower';
 export * from './Land';
 export * from './Land2';
 export * from './Cloud';
+export * from './Scenery';
 export * from './Bird_Original';
 export * from './Bird_Realistic';
 export * from './Bird_Cartoon';
