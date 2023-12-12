@@ -110,6 +110,7 @@ class SeedScene extends Scene {
         // Move obstacles forward
         for (var obstacle of this.state.obstacles){
             obstacle.position.z -= this.state.speed;
+            // need to move clouds forward
         }
     }
 
