@@ -34,12 +34,17 @@ class SeedScene extends Scene {
             scenery_options: null,
             clouds: [],
             speed: null,
+            alive: true,
+            paused: false,
+            score: "00000",
+            score_speed: 800,
+            high_score: "00000"
         };
 
         // Populate GUI
         this.state.gui.add(this.state, 'rotationSpeed', -5, 5);
         var player_style = this.state.gui.add(this.state, 'style', ["Original", "Cartoon", "Realistic"]).name('Style');
-
+        
         // Set background to a nice color
         this.background = new Color(0x7ec0ee);
 
@@ -47,6 +52,8 @@ class SeedScene extends Scene {
         this.state.scenery_options = ["Tree1", "Tree4",  "Rock1",  "Rock2", "Grass2", "Bush1", "Flower"];
         this.state.in_game = true;
         this.state.speed = 0.5;
+
+        this.createScoreboard();
 
         /******************** Add Meshes to Scene *********************/
         player_style.onChange((value) => this.switchStyles(value));
@@ -224,6 +231,10 @@ class SeedScene extends Scene {
     }
 
     update(timeStamp) {
+        if (this.state.paused){
+            return;
+        }
+        else{
         const { rotationSpeed, updateList } = this.state;
         this.state.frames += 1;
         this.rotation.y = (rotationSpeed * timeStamp) / 10000;
@@ -246,7 +257,20 @@ class SeedScene extends Scene {
         // Check if there has been a collision
         for (var obstacle of this.state.obstacles){
             if (this.detectCollision(player, obstacle)){
-                console.log("Collision");
+                if (this.state.alive){
+                    this.state.paused = true;
+                    this.state.alive = false;
+                    this.showGameOver();
+                    let restart_button = document.getElementById('restart')
+                    if (restart_button != null){
+                        restart_button.addEventListener('click', function() {
+                            
+                            //chrome.storage.local.set({ 'high_score': counter }, {})
+                            parent.window.location.reload(true);
+                        }, false);
+                    }
+                    
+                }
             }
         }
 
@@ -267,11 +291,19 @@ class SeedScene extends Scene {
         for (var item of this.state.scenery_right){
             item.position.z -= (this.state.speed);
         }
-
+        
         /*********** Remove items and add new items to scene **********/
         this.loadNewScenery(this.state.clouds, "clouds", null, 50);
         this.loadNewScenery(this.state.scenery_left, "scenery", "left", 50);
         this.loadNewScenery(this.state.scenery_right, "scenery", "right", 50);
+
+        /*********** Update the score displayed **********/
+        this.updateScore(timeStamp);
+        // changes the score speed to increase at a slower rate the longer the
+        // game is played
+        this.state.score_speed = 800 + (timeStamp/1000);
+
+        }
     }
 
     switchStyles(style){
@@ -320,6 +352,22 @@ class SeedScene extends Scene {
     }
 
     /**
+     * Returns true if the bounding boxes defined by the vectors intersect 
+     * @param {!THREE.Vector3} min1 (dinosaur min bounding box vector)
+     * @param {!THREE.Vector3} max1 (dinosaur max bounding box vector)
+     * @param {!THREE.Vector3} min2 (obstacle min bounding box vector)
+     * @param {!THREE.Vector3} max2 (obstacle min bounding box vector)
+     */
+    checkBoxIntersect(min1, max1, min2, max2){
+        if ((max1.x <= min2.x || max2.x <= min1.x) || (max1.y <= min2.y || max2.y <= min1.y) || (max1.z <= min2.z || max2.z <= min1.z)){
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
+
+    /**
      * Returns true if there was a collision between player and obstacle 
      * @param {!mesh obj} player (dinosaur)
      * @param {!mesh obj} obstacle (bird or cactus)
@@ -328,10 +376,137 @@ class SeedScene extends Scene {
      */
     detectCollision(player, obstacle){
         const player_box = player.state.box;
-        if (player_box != null){
-            return player_box.containsPoint(obstacle.position);
+        const player_pos = player.position;
+        const offset_amount_bird = {x: 0.7, y:0.1, z:0.1};
+        if (player_box != null && player_pos != null){
+            const object_pos = obstacle.position;
+            const min_vec_p = new THREE.Vector3(player_box.min.x + player_pos.x, player_box.min.y + player_pos.y, player_box.min.z + player_pos.z);
+            const max_vec_p = new THREE.Vector3(player_box.max.x + player_pos.x, player_box.max.y + player_pos.y, player_box.max.z + player_pos.z);
+            const min_vec_o = new THREE.Vector3(-offset_amount_bird.x + object_pos.x, -offset_amount_bird.y + object_pos.y, -offset_amount_bird.z + object_pos.z);
+            const max_vec_o = new THREE.Vector3(offset_amount_bird.x + object_pos.x, offset_amount_bird.y + object_pos.y, offset_amount_bird.z + object_pos.z);
+            return this.checkBoxIntersect(min_vec_p, max_vec_p, min_vec_o, max_vec_o);
+
         }
     }
+
+    /**
+     * Displays the html box for when the game ends due to a collision 
+     */
+    showGameOver(){
+        // Create overlay
+        const overlay = document.createElement('div');
+        overlay.id = 'overlay';
+        document.body.appendChild(overlay);
+    
+        // Create and show the pause modal
+        const modal = document.createElement('div');
+        modal.id = 'game-over-popup';
+        modal.innerHTML = `
+        <div class="col" style="font-family: Papyrus;">
+            <h1> Game Over</h1>
+            <button id="restart"><img src=""></button>
+        </div>`;
+        document.body.appendChild(modal);
+
+        // Add styles
+        overlay.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+        `;
+
+        modal.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 40%;
+            height: 30%;
+            background: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 150px 300px;
+            border-radius: 10px;
+            text-align: center;
+            z-index: 999;
+        `;
+        if (Number(this.state.score) > this.state.high_score){
+            window.localStorage.setItem("high_score", Number(this.state.score));
+        }
+    }
+
+    /**
+     * Creates the initial top left scoreboard that's displayed
+     */
+    createScoreboard(){
+
+        const score_overlay = document.createElement('div');
+        score_overlay.id = 'score_overlay';
+        document.body.appendChild(score_overlay);
+    
+        const panel_modal = document.createElement('div');
+        panel_modal.id = 'score-panel';
+        panel_modal.innerHTML = `
+        <div class="col" style="font-family: Papyrus;">
+            <h1 id = "score-text"></h1>
+        </div>`;
+        document.body.appendChild(panel_modal);
+        panel_modal.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 80%;
+            height: 20%;
+            background: rgba(0,0,0,0);
+            display: flex;
+            justify-content: left;
+            align-items: left;
+            margin: -15px 30px;
+            text-align: center;
+            font-size: 25px;
+            z-index: 999;
+        `;
+
+        const saved_score = window.localStorage.getItem("high_score");
+        if (saved_score != null){
+            if (saved_score > Number(this.state.high_score)){
+                let append_string = String(saved_score);
+                while (append_string.length < 5){
+                    append_string = "0" + append_string;
+                }
+                this.state.high_score = append_string;
+            }
+        }
+        document.getElementById("score-text").innerText = "HI  " + this.state.high_score + "  " + this.state.score;
+    }
+    
+    /**
+     * Updates the score to increase the longer a player stays in the game
+     */
+    updateScore(timeStamp){
+        var value = Number(this.state.score);
+        value = timeStamp/(this.state.score_speed);
+        var changed = Math.round(value);
+        if (Number(this.state.score) != changed){
+            let append_string = String(changed);
+            while (append_string.length < 5){
+                append_string = "0" + append_string;
+            }
+
+            this.state.score = append_string;
+            document.getElementById("score-text").innerText = "HI  " + this.state.high_score + "  " + this.state.score;
+        }
+    }
+    
+
+    
 }
 
 export default SeedScene;

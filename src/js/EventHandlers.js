@@ -11,6 +11,9 @@ const keys = {
     down: {
         pressed: false
     },
+    up:{
+        pressed: false
+    },
     jump: {
         pressed: false
     },
@@ -39,6 +42,9 @@ export function handleKeyDown(event){
             keys.down.pressed = true;
             break;
         // Jump
+        case 'ArrowUp':
+            keys.jump.pressed = true;
+            break;
         case 'Space':
             keys.jump.pressed = true;
             break;
@@ -67,6 +73,9 @@ export function handleKeyUp(event){
             keys.down.pressed = false;
             break;
         // Jump
+        case 'ArrowUp':
+            keys.jump.pressed = false;
+            break;
         case 'Space':
             keys.jump.pressed = false;
             break;
