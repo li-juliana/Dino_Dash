@@ -340,7 +340,7 @@ class SeedScene extends Scene {
     detectCollision(player, obstacle){
         const player_box = player.state.box;
         const player_pos = player.position;
-        const offset_amount_bird = {x: 0.6, y:0.1, z:0.1};
+        const offset_amount_bird = {x: 0.7, y:0.1, z:0.1};
         if (player_box != null && player_pos != null){
             const object_pos = obstacle.position;
             const min_vec_p = new THREE.Vector3(player_box.min.x + player_pos.x, player_box.min.y + player_pos.y, player_box.min.z + player_pos.z);
