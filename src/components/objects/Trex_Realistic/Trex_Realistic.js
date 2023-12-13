@@ -36,9 +36,9 @@ class Trex_Realistic extends Group {
         this.position.z = -4;
 
         // Adjust size of dinosaur
-        this.scale.x = 0.2;
-        this.scale.y = 0.2;
-        this.scale.z = 0.2;
+        this.scale.x = 0.5;
+        this.scale.y = 0.5;
+        this.scale.z = 0.5;
 
         // Add self to parent's update list (for animation each frame)
         parent.addToUpdateList(this);

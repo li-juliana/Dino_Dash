@@ -1,6 +1,6 @@
 import * as Dat from 'dat.gui';
 import * as THREE from 'three';
-import { Scene, Color, FogExp2} from 'three';
+import { Scene, Color, Fog} from 'three';
 import { Land, Land2 } from 'objects';
 // Game Assets
 import { Bird_Cartoon, Bird_Original, Bird_Realistic } from 'objects'; // Birds
@@ -44,22 +44,22 @@ class SeedScene extends Scene {
         // Add available scenery options
         this.state.scenery_options = ["Tree1", "Tree4",  "Rock1",  "Rock2", "Grass2", "Bush1", "Cactus1"];
 
-        this.state.speed = 0.5;
+        this.state.speed = 0.75;
 
         /******************** Add Meshes to Scene *********************/
         player_style.onChange((value) => this.switchStyles(value));
 
-        // Add floor and lights
+        // Add floor and scene right / left
         const lights = new BasicLights();
-        var floor = new Land2();
-        this.add(lights, floor);
-
-        // Add scene right and left
         var scene_right = new Land();
         scene_right.position.x = -175;
         var scene_left = new Land();
         scene_left.position.x = 175;
-        this.add(scene_right, scene_left);
+        this.add(lights, scene_right, scene_left);
+
+        // Add floor
+        var floor = new Land2();
+        this.add(floor);
 
         // Add items to scene right
         for (var j = 0; j < 100; j++){
