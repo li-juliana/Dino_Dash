@@ -1,11 +1,11 @@
 import * as Dat from 'dat.gui';
 import * as THREE from 'three';
-import { Scene, Color, Fog} from 'three';
+import { Scene, Color} from 'three';
 import { Land, Land2 } from 'objects';
 // Game Assets
 import { Bird_Cartoon, Bird_Original, Bird_Realistic } from 'objects'; // Birds
 import { Trex_Cartoon, Trex_Original, Trex_Realistic } from 'objects'; // Dinosaurs
-import { Cloud, Tree1, PalmTree, Rock1, Rock2, Grass2, Bush1, Cactus1 } from 'objects'; // Scenery
+import { Cloud, Tree1, PalmTree, Rock1, Rock2, Grass2, Bush1, Cactus1, Flower } from 'objects'; // Scenery
 import { BasicLights } from 'lights';
 
 class SeedScene extends Scene {
@@ -18,14 +18,16 @@ class SeedScene extends Scene {
 
         // Init state
         this.state = {
+            frames: 0,
             gui: new Dat.GUI(), // Create GUI for scene
             rotationSpeed: 0, // TODO: change back to 1 later
             updateList: [],
             prev_timestamp: null,
+            in_game: null,
             style: "Original",
             current_style: "Original",
             player_options: [],
-            available_obstacles: [],
+            obstacle_options: [],
             obstacles: [],
             scenery_left: [],
             scenery_right: [],
@@ -47,8 +49,8 @@ class SeedScene extends Scene {
         this.background = new Color(0x7ec0ee);
 
         // Add available scenery options
-        this.state.scenery_options = ["Tree1", "Tree4",  "Rock1",  "Rock2", "Grass2", "Bush1", "Cactus1"];
-
+        this.state.scenery_options = ["Tree1", "Tree4",  "Rock1",  "Rock2", "Grass2", "Bush1", "Flower"];
+        this.state.in_game = true;
         this.state.speed = 0.5;
 
         this.createScoreboard();
@@ -56,17 +58,17 @@ class SeedScene extends Scene {
         /******************** Add Meshes to Scene *********************/
         player_style.onChange((value) => this.switchStyles(value));
 
-        // Add floor and lights
+        // Add floor and scene right / left
         const lights = new BasicLights();
-        var floor = new Land2();
-        this.add(lights, floor);
-
-        // Add scene right and left
         var scene_right = new Land();
         scene_right.position.x = -175;
         var scene_left = new Land();
         scene_left.position.x = 175;
-        this.add(scene_right, scene_left);
+        this.add(lights, scene_right, scene_left);
+
+        // Add floor
+        var floor = new Land2();
+        this.add(floor);
 
         // Add items to scene right
         for (var j = 0; j < 100; j++){
@@ -90,9 +92,33 @@ class SeedScene extends Scene {
         const bird_original = new Bird_Original(this);
         const bird_cartoon = new Bird_Cartoon(this);
         const bird_realistic = new Bird_Realistic(this);
-        this.state.available_obstacles.push(bird_original, bird_cartoon, bird_realistic);
-        this.add(bird_original);
-        this.state.obstacles.push(bird_original);
+        this.state.obstacle_options.push(bird_original, bird_cartoon, bird_realistic);
+    }
+
+    loadObstacle(type, offset){
+        let obstacle;
+        if (type == "Cactus1"){
+            obstacle = new Cactus1();
+            obstacle.scale.x = 1;
+            obstacle.scale.y = 1;
+            obstacle.scale.z = 1;
+        } else {
+            switch(type) {
+                case "Bird_Original":
+                    obstacle = new Bird_Original(this);
+                    break;
+                case "Bird_Cartoon":
+                    obstacle = new Bird_Cartoon(this);
+                    break;
+                case "Bird_Realistic":
+                    obstacle = new Bird_Realistic(this);
+                    break;
+            }
+        }
+        obstacle.position.x = Math.floor(Math.random() * 7) - 3;
+        obstacle.position.z = 175 + offset;
+        this.add(obstacle);
+        this.state.obstacles.push(obstacle);
     }
 
     /**
@@ -142,8 +168,8 @@ class SeedScene extends Scene {
             case "Bush1":
                 item = new Bush1();
                 break;
-            case "Cactus1":
-                item = new Cactus1();
+            case "Flower":
+                item = new Flower();
                 break;
         }
 
@@ -210,6 +236,7 @@ class SeedScene extends Scene {
         }
         else{
         const { rotationSpeed, updateList } = this.state;
+        this.state.frames += 1;
         this.rotation.y = (rotationSpeed * timeStamp) / 10000;
         // Call update for each object in the updateList
         for (const obj of updateList) {
@@ -218,6 +245,16 @@ class SeedScene extends Scene {
 
         var player = this.getObjectByName("Trex_" + this.state.style);
         // Add obstacles to the scene
+        if (this.state.frames % 30 == 0){
+            var select = Math.floor(Math.random() * 2);
+            if (select == 0){
+                this.loadObstacle("Bird_Original", 0);
+            } else {
+                this.loadObstacle("Cactus1", 0);
+            }
+        }
+
+        // Check if there has been a collision
         for (var obstacle of this.state.obstacles){
             if (this.detectCollision(player, obstacle)){
                 if (this.state.alive){
@@ -270,48 +307,48 @@ class SeedScene extends Scene {
     }
 
     switchStyles(style){
-        var desired_player = "Trex_" + style;
-        var current_player = "Trex_" + this.state.current_style;
+        // var desired_player = "Trex_" + style;
+        // var current_player = "Trex_" + this.state.current_style;
 
-        var desired_obstacle = "Bird_" + style;
-        var current_obstacle = "Bird_" + this.state.current_style;
+        // var desired_obstacle = "Bird_" + style;
+        // var current_obstacle = "Bird_" + this.state.current_style;
 
-        // TODO: Need to add and remove cactus styles after adding cactus to game
+        // // TODO: Need to add and remove cactus styles after adding cactus to game
 
-        let remove_player;
-        let remove_obstacle;
-        this.children.forEach(element => {
-            // Find the current dinosaur from the scene to remove
-            if (element.name == current_player) {
-                remove_player = element;
-            }
-            // Find the current bird obstacle from the scene to remove
-            if (element.name == current_obstacle){
-                remove_obstacle = element;
-            }
-        });
-        if (remove_player != null){
-            this.remove(remove_player);
-        }
-        if (remove_obstacle != null){
-            this.remove(remove_obstacle);
-        }
+        // let remove_player;
+        // let remove_obstacle;
+        // this.children.forEach(element => {
+        //     // Find the current dinosaur from the scene to remove
+        //     if (element.name == current_player) {
+        //         remove_player = element;
+        //     }
+        //     // Find the current bird obstacle from the scene to remove
+        //     if (element.name == current_obstacle){
+        //         remove_obstacle = element;
+        //     }
+        // });
+        // if (remove_player != null){
+        //     this.remove(remove_player);
+        // }
+        // if (remove_obstacle != null){
+        //     this.remove(remove_obstacle);
+        // }
         
-        // Add desired player to scene
-        this.state.player_options.forEach(element => {
-            if (element.name == desired_player){
-                this.add(element);
-            }
-        });
+        // // Add desired player to scene
+        // this.state.player_options.forEach(element => {
+        //     if (element.name == desired_player){
+        //         this.add(element);
+        //     }
+        // });
 
-        // Add desired bird obstacle to scene
-        this.state.available_obstacles.forEach(element => {
-            if (element.name == desired_obstacle){
-                this.add(element);
-            }
-        });
+        // // Add desired bird obstacle to scene
+        // this.state.obstacle_options.forEach(element => {
+        //     if (element.name == desired_obstacle){
+        //         this.add(element);
+        //     }
+        // });
         
-        this.state.current_style = style;
+        // this.state.current_style = style;
     }
 
     /**
