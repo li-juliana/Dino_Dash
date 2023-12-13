@@ -23,7 +23,7 @@ class SeedScene extends Scene {
             rotationSpeed: 0, // TODO: change back to 1 later
             updateList: [],
             prev_timestamp: null,
-            in_game: null,
+            in_game: true,
             style: "Original",
             current_style: "Original",
             player_options: [],
@@ -34,7 +34,6 @@ class SeedScene extends Scene {
             scenery_options: null,
             clouds: [],
             speed: null,
-            alive: true,
             paused: false,
             score: "00000",
             score_speed: 800,
@@ -50,7 +49,6 @@ class SeedScene extends Scene {
 
         // Add available scenery options
         this.state.scenery_options = ["Tree1", "Tree4",  "Rock1",  "Rock2", "Grass2", "Bush1", "Flower"];
-        this.state.in_game = true;
         this.state.speed = 0.5;
 
         this.createScoreboard();
@@ -257,9 +255,9 @@ class SeedScene extends Scene {
         // Check if there has been a collision
         for (var obstacle of this.state.obstacles){
             if (this.detectCollision(player, obstacle)){
-                if (this.state.alive){
+                if (this.state.in_game){
                     this.state.paused = true;
-                    this.state.alive = false;
+                    this.state.in_game = false;
                     this.showGameOver();
                     let restart_button = document.getElementById('restart')
                     if (restart_button != null){
