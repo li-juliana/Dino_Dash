@@ -91,12 +91,12 @@ export function handleMovement(scene){
     if(keys.left.pressed){
         // Only move left if still on the land
         if (player.position.x + 0.05 <= land.scale.x + offset){
-            player.position.x += 0.08;   
+            player.position.x += 0.05;   
         }
     } else if (keys.right.pressed){
         // Only move right if still on the land
         if (player.position.x - 0.05 >= -1 * land.scale.x - offset){
-            player.position.x -= 0.08;   
+            player.position.x -= 0.05;   
         }
     } 
     

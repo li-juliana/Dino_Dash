@@ -46,7 +46,7 @@ class SeedScene extends Scene {
         // Add available scenery options
         this.state.scenery_options = ["Tree1", "Tree4",  "Rock1",  "Rock2", "Grass2", "Bush1", "Flower"];
         this.state.in_game = true;
-        this.state.speed = 0.75;
+        this.state.speed = 0.5;
 
         /******************** Add Meshes to Scene *********************/
         player_style.onChange((value) => this.switchStyles(value));
@@ -234,7 +234,7 @@ class SeedScene extends Scene {
 
         var player = this.getObjectByName("Trex_" + this.state.style);
         // Add obstacles to the scene
-        if (this.state.frames % 20 == 0){
+        if (this.state.frames % 30 == 0){
             var select = Math.floor(Math.random() * 2);
             if (select == 0){
                 this.loadObstacle("Bird_Original", 0);
