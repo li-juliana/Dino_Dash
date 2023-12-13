@@ -39,7 +39,7 @@ class SeedScene extends Scene {
         // Populate GUI
         this.state.gui.add(this.state, 'rotationSpeed', -5, 5);
         var player_style = this.state.gui.add(this.state, 'style', ["Original", "Cartoon", "Realistic"]).name('Style');
-
+        
         // Set background to a nice color
         this.background = new Color(0x7ec0ee);
 
@@ -320,7 +320,7 @@ class SeedScene extends Scene {
     detectCollision(player, obstacle){
         const player_box = player.state.box;
         const player_pos = player.position;
-        const offset_amount_bird = {x: 0.7, y:0.3, z:0.2};
+        const offset_amount_bird = {x: 0.7, y:0.2, z:0.1};
         if (player_box != null && player_pos != null){
             const object_pos = obstacle.position;
             const min_vec_p = new THREE.Vector3(player_box.min.x + player_pos.x, player_box.min.y + player_pos.y, player_box.min.z + player_pos.z);
