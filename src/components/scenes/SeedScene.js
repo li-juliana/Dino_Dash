@@ -35,7 +35,8 @@ class SeedScene extends Scene {
             alive: true,
             paused: false,
             score: "00000",
-            score_speed: 1000
+            score_speed: 800,
+            high_score: "00000"
         };
 
         // Populate GUI
@@ -226,6 +227,8 @@ class SeedScene extends Scene {
                     let restart_button = document.getElementById('restart')
                     if (restart_button != null){
                         restart_button.addEventListener('click', function() {
+                            
+                            //chrome.storage.local.set({ 'high_score': counter }, {})
                             parent.window.location.reload(true);
                         }, false);
                     }
@@ -259,6 +262,7 @@ class SeedScene extends Scene {
 
         /*********** Update the score displayed **********/
         this.updateScore(timeStamp);
+        this.state.score_speed = 800 + (timeStamp/1000);
 
         }
     }
@@ -380,8 +384,8 @@ class SeedScene extends Scene {
             position: fixed;
             top: 0;
             left: 0;
-            width: 50%;
-            height: 50%;
+            width: 40%;
+            height: 30%;
             background: white;
             display: flex;
             justify-content: center;
@@ -391,6 +395,9 @@ class SeedScene extends Scene {
             text-align: center;
             z-index: 999;
         `;
+        if (Number(this.state.score) > this.state.high_score){
+            window.localStorage.setItem("high_score", Number(this.state.score));
+        }
     }
 
     createScoreboard(){
@@ -408,23 +415,33 @@ class SeedScene extends Scene {
             <h1 id = "score-text"></h1>
         </div>`;
         document.body.appendChild(panel_modal);
-        document.getElementById("score-text").innerText = this.state.score;
         panel_modal.style.cssText = `
             position: fixed;
             top: 0;
             left: 0;
-            width: 30%;
+            width: 80%;
             height: 20%;
             background: rgba(0,0,0,0);
             display: flex;
             justify-content: left;
             align-items: left;
-            margin: -15px 40px;
+            margin: -15px 30px;
             text-align: center;
             font-size: 25px;
             z-index: 999;
         `;
 
+        const saved_score = window.localStorage.getItem("high_score");
+        if (saved_score != null){
+            if (saved_score > Number(this.state.high_score)){
+                let append_string = String(saved_score);
+                while (append_string.length < 5){
+                    append_string = "0" + append_string;
+                }
+                this.state.high_score = append_string;
+            }
+        }
+        document.getElementById("score-text").innerText = "HI  " + this.state.high_score + "  " + this.state.score;
     }
         
     updateScore(timeStamp){
@@ -438,7 +455,7 @@ class SeedScene extends Scene {
             }
 
             this.state.score = append_string;
-            document.getElementById("score-text").innerText = this.state.score;
+            document.getElementById("score-text").innerText = "HI  " + this.state.high_score + "  " + this.state.score;
         }
     }
     
