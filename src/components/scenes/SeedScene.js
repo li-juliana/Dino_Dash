@@ -33,6 +33,7 @@ class SeedScene extends Scene {
             clouds: [],
             speed: null,
             alive: true,
+            paused: false
         };
 
         // Populate GUI
@@ -199,6 +200,10 @@ class SeedScene extends Scene {
     }
 
     update(timeStamp) {
+        if (this.state.paused){
+            return;
+        }
+        else{
         const { rotationSpeed, updateList } = this.state;
         this.rotation.y = (rotationSpeed * timeStamp) / 10000;
         // Call update for each object in the updateList
@@ -211,9 +216,10 @@ class SeedScene extends Scene {
         for (var obstacle of this.state.obstacles){
             if (this.detectCollision(player, obstacle)){
                 if (this.state.alive){
-                    window.alert("Game Over");
+                    this.state.paused = true;
                     this.state.alive = false;
-                    parent.window.location.reload(true);
+
+                    //parent.window.location.reload(true);
                 }
             }
         }
@@ -240,6 +246,7 @@ class SeedScene extends Scene {
         this.loadNewScenery(this.state.clouds, "clouds", null, 50);
         this.loadNewScenery(this.state.scenery_left, "scenery", "left", 50);
         this.loadNewScenery(this.state.scenery_right, "scenery", "right", 50);
+        }
     }
 
     switchStyles(style){
