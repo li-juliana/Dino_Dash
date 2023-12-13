@@ -22,10 +22,11 @@ class SeedScene extends Scene {
             rotationSpeed: 0, // TODO: change back to 1 later
             updateList: [],
             prev_timestamp: null,
+            in_game: null,
             style: "Original",
             current_style: "Original",
             player_options: [],
-            available_obstacles: [],
+            obstacle_options: [],
             obstacles: [],
             scenery_left: [],
             scenery_right: [],
@@ -43,7 +44,7 @@ class SeedScene extends Scene {
 
         // Add available scenery options
         this.state.scenery_options = ["Tree1", "Tree4",  "Rock1",  "Rock2", "Grass2", "Bush1", "Cactus1"];
-
+        this.state.in_game = true;
         this.state.speed = 0.75;
 
         /******************** Add Meshes to Scene *********************/
@@ -83,9 +84,41 @@ class SeedScene extends Scene {
         const bird_original = new Bird_Original(this);
         const bird_cartoon = new Bird_Cartoon(this);
         const bird_realistic = new Bird_Realistic(this);
-        this.state.available_obstacles.push(bird_original, bird_cartoon, bird_realistic);
-        this.add(bird_original);
-        this.state.obstacles.push(bird_original);
+        this.state.obstacle_options.push(bird_original, bird_cartoon, bird_realistic);
+        for (let i = 0; i < 10; i++){
+            var select = Math.floor(Math.random() * 2);
+            if (select == 0){
+                this.loadObstacle("Bird_Original", 0);
+            } else {
+                this.loadObstacle("Cactus1", 0);
+            }
+        }
+    }
+
+    loadObstacle(type, offset){
+        let obstacle;
+        if (type == "Cactus1"){
+            obstacle = new Cactus1();
+            obstacle.scale.x = 1;
+            obstacle.scale.y = 1;
+            obstacle.scale.z = 1;
+        } else {
+            switch(type) {
+                case "Bird_Original":
+                    obstacle = new Bird_Original(this);
+                    break;
+                case "Bird_Cartoon":
+                    obstacle = new Bird_Cartoon(this);
+                    break;
+                case "Bird_Realistic":
+                    obstacle = new Bird_Realistic(this);
+                    break;
+            }
+        }
+        obstacle.position.x = Math.floor(Math.random() * 7) - 3;
+        obstacle.position.z = 50;
+        this.add(obstacle);
+        this.state.obstacles.push(obstacle);
     }
 
     /**
@@ -238,48 +271,48 @@ class SeedScene extends Scene {
     }
 
     switchStyles(style){
-        var desired_player = "Trex_" + style;
-        var current_player = "Trex_" + this.state.current_style;
+        // var desired_player = "Trex_" + style;
+        // var current_player = "Trex_" + this.state.current_style;
 
-        var desired_obstacle = "Bird_" + style;
-        var current_obstacle = "Bird_" + this.state.current_style;
+        // var desired_obstacle = "Bird_" + style;
+        // var current_obstacle = "Bird_" + this.state.current_style;
 
-        // TODO: Need to add and remove cactus styles after adding cactus to game
+        // // TODO: Need to add and remove cactus styles after adding cactus to game
 
-        let remove_player;
-        let remove_obstacle;
-        this.children.forEach(element => {
-            // Find the current dinosaur from the scene to remove
-            if (element.name == current_player) {
-                remove_player = element;
-            }
-            // Find the current bird obstacle from the scene to remove
-            if (element.name == current_obstacle){
-                remove_obstacle = element;
-            }
-        });
-        if (remove_player != null){
-            this.remove(remove_player);
-        }
-        if (remove_obstacle != null){
-            this.remove(remove_obstacle);
-        }
+        // let remove_player;
+        // let remove_obstacle;
+        // this.children.forEach(element => {
+        //     // Find the current dinosaur from the scene to remove
+        //     if (element.name == current_player) {
+        //         remove_player = element;
+        //     }
+        //     // Find the current bird obstacle from the scene to remove
+        //     if (element.name == current_obstacle){
+        //         remove_obstacle = element;
+        //     }
+        // });
+        // if (remove_player != null){
+        //     this.remove(remove_player);
+        // }
+        // if (remove_obstacle != null){
+        //     this.remove(remove_obstacle);
+        // }
         
-        // Add desired player to scene
-        this.state.player_options.forEach(element => {
-            if (element.name == desired_player){
-                this.add(element);
-            }
-        });
+        // // Add desired player to scene
+        // this.state.player_options.forEach(element => {
+        //     if (element.name == desired_player){
+        //         this.add(element);
+        //     }
+        // });
 
-        // Add desired bird obstacle to scene
-        this.state.available_obstacles.forEach(element => {
-            if (element.name == desired_obstacle){
-                this.add(element);
-            }
-        });
+        // // Add desired bird obstacle to scene
+        // this.state.obstacle_options.forEach(element => {
+        //     if (element.name == desired_obstacle){
+        //         this.add(element);
+        //     }
+        // });
         
-        this.state.current_style = style;
+        // this.state.current_style = style;
     }
 
     /**
