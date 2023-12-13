@@ -262,6 +262,8 @@ class SeedScene extends Scene {
 
         /*********** Update the score displayed **********/
         this.updateScore(timeStamp);
+        // changes the score speed to increase at a slower rate the longer the
+        // game is played
         this.state.score_speed = 800 + (timeStamp/1000);
 
         }
@@ -338,7 +340,7 @@ class SeedScene extends Scene {
     detectCollision(player, obstacle){
         const player_box = player.state.box;
         const player_pos = player.position;
-        const offset_amount_bird = {x: 0.7, y:0.2, z:0.1};
+        const offset_amount_bird = {x: 0.6, y:0.1, z:0.1};
         if (player_box != null && player_pos != null){
             const object_pos = obstacle.position;
             const min_vec_p = new THREE.Vector3(player_box.min.x + player_pos.x, player_box.min.y + player_pos.y, player_box.min.z + player_pos.z);
@@ -350,6 +352,9 @@ class SeedScene extends Scene {
         }
     }
 
+    /**
+     * Displays the html box for when the game ends due to a collision 
+     */
     showGameOver(){
         // Create overlay
         const overlay = document.createElement('div');
@@ -400,14 +405,15 @@ class SeedScene extends Scene {
         }
     }
 
+    /**
+     * Creates the initial top left scoreboard that's displayed
+     */
     createScoreboard(){
 
-        // Create overlay
         const score_overlay = document.createElement('div');
         score_overlay.id = 'score_overlay';
         document.body.appendChild(score_overlay);
     
-        // Create and show the pause modal
         const panel_modal = document.createElement('div');
         panel_modal.id = 'score-panel';
         panel_modal.innerHTML = `
@@ -443,7 +449,10 @@ class SeedScene extends Scene {
         }
         document.getElementById("score-text").innerText = "HI  " + this.state.high_score + "  " + this.state.score;
     }
-        
+    
+    /**
+     * Updates the score to increase the longer a player stays in the game
+     */
     updateScore(timeStamp){
         var value = Number(this.state.score);
         value = timeStamp/(this.state.score_speed);
