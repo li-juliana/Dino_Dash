@@ -1,11 +1,11 @@
 import * as Dat from 'dat.gui';
 import * as THREE from 'three';
-import { Scene, Color, Fog} from 'three';
+import { Scene, Color} from 'three';
 import { Land, Land2 } from 'objects';
 // Game Assets
 import { Bird_Cartoon, Bird_Original, Bird_Realistic } from 'objects'; // Birds
 import { Trex_Cartoon, Trex_Original, Trex_Realistic } from 'objects'; // Dinosaurs
-import { Cloud, Tree1, PalmTree, Rock1, Rock2, Grass2, Bush1, Cactus1 } from 'objects'; // Scenery
+import { Cloud, Tree1, PalmTree, Rock1, Rock2, Grass2, Bush1, Cactus1, Flower } from 'objects'; // Scenery
 import { BasicLights } from 'lights';
 
 class SeedScene extends Scene {
@@ -18,6 +18,7 @@ class SeedScene extends Scene {
 
         // Init state
         this.state = {
+            frames: 0,
             gui: new Dat.GUI(), // Create GUI for scene
             rotationSpeed: 0, // TODO: change back to 1 later
             updateList: [],
@@ -43,7 +44,7 @@ class SeedScene extends Scene {
         this.background = new Color(0x7ec0ee);
 
         // Add available scenery options
-        this.state.scenery_options = ["Tree1", "Tree4",  "Rock1",  "Rock2", "Grass2", "Bush1", "Cactus1"];
+        this.state.scenery_options = ["Tree1", "Tree4",  "Rock1",  "Rock2", "Grass2", "Bush1", "Flower"];
         this.state.in_game = true;
         this.state.speed = 0.75;
 
@@ -85,14 +86,6 @@ class SeedScene extends Scene {
         const bird_cartoon = new Bird_Cartoon(this);
         const bird_realistic = new Bird_Realistic(this);
         this.state.obstacle_options.push(bird_original, bird_cartoon, bird_realistic);
-        for (let i = 0; i < 10; i++){
-            var select = Math.floor(Math.random() * 2);
-            if (select == 0){
-                this.loadObstacle("Bird_Original", 0);
-            } else {
-                this.loadObstacle("Cactus1", 0);
-            }
-        }
     }
 
     loadObstacle(type, offset){
@@ -116,7 +109,7 @@ class SeedScene extends Scene {
             }
         }
         obstacle.position.x = Math.floor(Math.random() * 7) - 3;
-        obstacle.position.z = 50;
+        obstacle.position.z = 175 + offset;
         this.add(obstacle);
         this.state.obstacles.push(obstacle);
     }
@@ -168,8 +161,8 @@ class SeedScene extends Scene {
             case "Bush1":
                 item = new Bush1();
                 break;
-            case "Cactus1":
-                item = new Cactus1();
+            case "Flower":
+                item = new Flower();
                 break;
         }
 
@@ -232,6 +225,7 @@ class SeedScene extends Scene {
 
     update(timeStamp) {
         const { rotationSpeed, updateList } = this.state;
+        this.state.frames += 1;
         this.rotation.y = (rotationSpeed * timeStamp) / 10000;
         // Call update for each object in the updateList
         for (const obj of updateList) {
@@ -240,6 +234,16 @@ class SeedScene extends Scene {
 
         var player = this.getObjectByName("Trex_" + this.state.style);
         // Add obstacles to the scene
+        if (this.state.frames % 20 == 0){
+            var select = Math.floor(Math.random() * 2);
+            if (select == 0){
+                this.loadObstacle("Bird_Original", 0);
+            } else {
+                this.loadObstacle("Cactus1", 0);
+            }
+        }
+
+        // Check if there has been a collision
         for (var obstacle of this.state.obstacles){
             if (this.detectCollision(player, obstacle)){
                 console.log("Collision");
