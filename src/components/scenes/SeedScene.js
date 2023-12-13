@@ -33,7 +33,9 @@ class SeedScene extends Scene {
             clouds: [],
             speed: null,
             alive: true,
-            paused: false
+            paused: false,
+            score: "00000",
+            score_speed: 1000
         };
 
         // Populate GUI
@@ -47,6 +49,8 @@ class SeedScene extends Scene {
         this.state.scenery_options = ["Tree1", "Tree4",  "Rock1",  "Rock2", "Grass2", "Bush1", "Cactus1"];
 
         this.state.speed = 0.5;
+
+        this.createScoreboard();
 
         /******************** Add Meshes to Scene *********************/
         player_style.onChange((value) => this.switchStyles(value));
@@ -218,8 +222,14 @@ class SeedScene extends Scene {
                 if (this.state.alive){
                     this.state.paused = true;
                     this.state.alive = false;
-
-                    //parent.window.location.reload(true);
+                    this.showGameOver();
+                    let restart_button = document.getElementById('restart')
+                    if (restart_button != null){
+                        restart_button.addEventListener('click', function() {
+                            parent.window.location.reload(true);
+                        }, false);
+                    }
+                    
                 }
             }
         }
@@ -241,11 +251,15 @@ class SeedScene extends Scene {
         for (var item of this.state.scenery_right){
             item.position.z -= (this.state.speed);
         }
-
+        
         /*********** Remove items and add new items to scene **********/
         this.loadNewScenery(this.state.clouds, "clouds", null, 50);
         this.loadNewScenery(this.state.scenery_left, "scenery", "left", 50);
         this.loadNewScenery(this.state.scenery_right, "scenery", "right", 50);
+
+        /*********** Update the score displayed **********/
+        this.updateScore(timeStamp);
+
         }
     }
 
@@ -331,6 +345,103 @@ class SeedScene extends Scene {
 
         }
     }
+
+    showGameOver(){
+        // Create overlay
+        const overlay = document.createElement('div');
+        overlay.id = 'overlay';
+        document.body.appendChild(overlay);
+    
+        // Create and show the pause modal
+        const modal = document.createElement('div');
+        modal.id = 'game-over-popup';
+        modal.innerHTML = `
+        <div class="col" style="font-family: Papyrus;">
+            <h1> Game Over</h1>
+            <button id="restart"><img src=""></button>
+        </div>`;
+        document.body.appendChild(modal);
+
+        // Add styles
+        overlay.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+        `;
+
+        modal.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 50%;
+            height: 50%;
+            background: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 150px 300px;
+            border-radius: 10px;
+            text-align: center;
+            z-index: 999;
+        `;
+    }
+
+    createScoreboard(){
+
+        // Create overlay
+        const score_overlay = document.createElement('div');
+        score_overlay.id = 'score_overlay';
+        document.body.appendChild(score_overlay);
+    
+        // Create and show the pause modal
+        const panel_modal = document.createElement('div');
+        panel_modal.id = 'score-panel';
+        panel_modal.innerHTML = `
+        <div class="col" style="font-family: Papyrus;">
+            <h1 id = "score-text"></h1>
+        </div>`;
+        document.body.appendChild(panel_modal);
+        document.getElementById("score-text").innerText = this.state.score;
+        panel_modal.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 30%;
+            height: 20%;
+            background: rgba(0,0,0,0);
+            display: flex;
+            justify-content: left;
+            align-items: left;
+            margin: -15px 40px;
+            text-align: center;
+            font-size: 25px;
+            z-index: 999;
+        `;
+
+    }
+        
+    updateScore(timeStamp){
+        var value = Number(this.state.score);
+        value = timeStamp/(this.state.score_speed);
+        var changed = Math.round(value);
+        if (Number(this.state.score) != changed){
+            let append_string = String(changed);
+            while (append_string.length < 5){
+                append_string = "0" + append_string;
+            }
+
+            this.state.score = append_string;
+            document.getElementById("score-text").innerText = this.state.score;
+        }
+    }
+    
 
     
 }
