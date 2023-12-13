@@ -1,6 +1,6 @@
 import * as Dat from 'dat.gui';
 import * as THREE from 'three';
-import { Scene, Color, FogExp2} from 'three';
+import { Scene, Color, Fog} from 'three';
 import { Land, Land2 } from 'objects';
 // Game Assets
 import { Bird_Cartoon, Bird_Original, Bird_Realistic } from 'objects'; // Birds
@@ -32,6 +32,7 @@ class SeedScene extends Scene {
             scenery_options: null,
             clouds: [],
             speed: null,
+            alive: true,
         };
 
         // Populate GUI
@@ -209,7 +210,11 @@ class SeedScene extends Scene {
         // Add obstacles to the scene
         for (var obstacle of this.state.obstacles){
             if (this.detectCollision(player, obstacle)){
-                console.log("Collision");
+                if (this.state.alive){
+                    window.alert("Game Over");
+                    this.state.alive = false;
+                    parent.window.location.reload(true);
+                }
             }
         }
 
@@ -283,6 +288,22 @@ class SeedScene extends Scene {
     }
 
     /**
+     * Returns true if the bounding boxes defined by the vectors intersect 
+     * @param {!THREE.Vector3} min1 (dinosaur min bounding box vector)
+     * @param {!THREE.Vector3} max1 (dinosaur max bounding box vector)
+     * @param {!THREE.Vector3} min2 (obstacle min bounding box vector)
+     * @param {!THREE.Vector3} max2 (obstacle min bounding box vector)
+     */
+    checkBoxIntersect(min1, max1, min2, max2){
+        if ((max1.x <= min2.x || max2.x <= min1.x) || (max1.y <= min2.y || max2.y <= min1.y) || (max1.z <= min2.z || max2.z <= min1.z)){
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
+
+    /**
      * Returns true if there was a collision between player and obstacle 
      * @param {!mesh obj} player (dinosaur)
      * @param {!mesh obj} obstacle (bird or cactus)
@@ -291,10 +312,20 @@ class SeedScene extends Scene {
      */
     detectCollision(player, obstacle){
         const player_box = player.state.box;
-        if (player_box != null){
-            return player_box.containsPoint(obstacle.position);
+        const player_pos = player.position;
+        const offset_amount_bird = {x: 0.7, y:0.3, z:0.2};
+        if (player_box != null && player_pos != null){
+            const object_pos = obstacle.position;
+            const min_vec_p = new THREE.Vector3(player_box.min.x + player_pos.x, player_box.min.y + player_pos.y, player_box.min.z + player_pos.z);
+            const max_vec_p = new THREE.Vector3(player_box.max.x + player_pos.x, player_box.max.y + player_pos.y, player_box.max.z + player_pos.z);
+            const min_vec_o = new THREE.Vector3(-offset_amount_bird.x + object_pos.x, -offset_amount_bird.y + object_pos.y, -offset_amount_bird.z + object_pos.z);
+            const max_vec_o = new THREE.Vector3(offset_amount_bird.x + object_pos.x, offset_amount_bird.y + object_pos.y, offset_amount_bird.z + object_pos.z);
+            return this.checkBoxIntersect(min_vec_p, max_vec_p, min_vec_o, max_vec_o);
+
         }
     }
+
+    
 }
 
 export default SeedScene;
