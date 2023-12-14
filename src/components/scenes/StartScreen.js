@@ -21,7 +21,7 @@ export default class StartScreen {
         <div class="row">
             <div class="col" style="font-family: Papyrus; text-align: center; padding: 200px; ">
                 <h1>Dino Dash</h1>
-                <p style="font-family: Arial;">No wifi? No problem! Take a trip back to the dark ages with Dino Dash. Press Enter to get started!</p>
+                <p style="font-family: Arial;">No wifi? No problem! Take a trip back to the dark ages with Dino Dash. Select a style to get started!</p>
             </div>
         </div>
         `;
