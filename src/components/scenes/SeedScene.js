@@ -515,6 +515,11 @@ class SeedScene extends Scene {
         if (event.key === 'Escape') {
             this.togglePause();
         }
+
+        // ignore button clicks when game paused
+        if (this.state.gamePaused && event.key !== 'Escape') {
+            return;
+        }
     }
 
     togglePause() {

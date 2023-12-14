@@ -97,12 +97,12 @@ export function handleMovement(scene){
     const fallDownCartoon = new TWEEN.Tween(player.position).to({ y: -0.4}, 400).easing(TWEEN.Easing.Quadratic.In);
     
     // Movement along the x-axis
-    if(keys.left.pressed){
+    if(keys.left.pressed && !scene.state.gamePaused){
         // Only move left if still on the land
         if (player.position.x + 0.05 <= land.scale.x + offset){
             player.position.x += 0.05;   
         }
-    } else if (keys.right.pressed){
+    } else if (keys.right.pressed && !scene.state.gamePaused){
         // Only move right if still on the land
         if (player.position.x - 0.05 >= -1 * land.scale.x - offset){
             player.position.x -= 0.05;   
@@ -111,14 +111,14 @@ export function handleMovement(scene){
     
     // Movement along the y-axis
     // Only jump if the dinosaur is on floor (prevents floating)
-    if (keys.jump.pressed && player.position.y == floor_y){
+    if (keys.jump.pressed && player.position.y == floor_y && !scene.state.gamePaused){
         jumpUp.onComplete(() => fallDown.start());
         jumpUp.start();
     } else if (player.name == "Trex_Cartoon" && keys.jump.pressed && Math.abs(player.position.y + 0.4) <= EPS) {
         jumpUpCartoon.onComplete(() => fallDownCartoon.start());
         jumpUpCartoon.start();
     }
-    else if (keys.down.pressed){
+    else if (keys.down.pressed && !scene.state.gamePaused){
         // TODO: make dinosaur fall down faster when down key is pressed
     }
 }
