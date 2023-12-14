@@ -94,6 +94,8 @@ class SeedScene extends Scene {
         const bird_cartoon = new Bird_Cartoon(this);
         const bird_realistic = new Bird_Realistic(this);
         this.state.obstacle_options.push(bird_original, bird_cartoon, bird_realistic);
+        // Add event listener for the "keydown" event to detect "Esc" key
+        document.addEventListener('keydown', this.handleKeyDown.bind(this));
     }
 
     loadObstacle(type, offset){
