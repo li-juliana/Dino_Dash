@@ -37,7 +37,7 @@ class SeedScene extends Scene {
             scenery_options: null,
             clouds: [],
             speed: null,
-            // paused: false,
+            paused: false,
             score: "00000",
             score_speed: 800,
             high_score: "00000"
@@ -247,7 +247,7 @@ class SeedScene extends Scene {
     }
 
     update(timeStamp) {
-        if (this.state.paused || !this.gameStarted){
+        if (this.gamePaused || !this.gameStarted){
             return;
         }
         else{
