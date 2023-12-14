@@ -184,6 +184,19 @@ class SeedScene extends Scene {
         this.add(item);
     }
 
+    removeObstacles(array_obj){
+        if (array_obj != null){
+            for (var i = array_obj.length - 1; i >= 0; i--) {
+                // Dinosaur player is located at z = -4
+                if (array_obj[i].position.z < -50) {
+                    // Remove from scene
+                    this.remove(array_obj[i]);
+                    array_obj.splice(i, 1);
+                }
+            }
+        }
+    }
+
     /**
      * Removes a background item from the scene and update arrays if the
      * item has left the scene. If an item is removed, a new item is 
@@ -233,74 +246,74 @@ class SeedScene extends Scene {
             return;
         }
         else{
-        const { rotationSpeed, updateList } = this.state;
-        this.state.frames += 1;
-        this.rotation.y = (rotationSpeed * timeStamp) / 10000;
-        // Call update for each object in the updateList
-        for (const obj of updateList) {
-            obj.update(timeStamp);
-        }
-
-        var player = this.getObjectByName("Trex_" + this.state.style);
-        // Add obstacles to the scene
-        if (this.state.frames % 30 == 0){
-            var select = Math.floor(Math.random() * 2);
-            if (select == 0){
-                this.loadObstacle("Bird_Original", 0);
-            } else {
-                this.loadObstacle("Cactus1", 0);
+            const { rotationSpeed, updateList } = this.state;
+            this.state.frames += 1;
+            this.rotation.y = (rotationSpeed * timeStamp) / 10000;
+            // Call update for each object in the updateList
+            for (const obj of updateList) {
+                obj.update(timeStamp);
             }
-        }
 
-        // Check if there has been a collision
-        for (var obstacle of this.state.obstacles){
-            if (this.detectCollision(player, obstacle)){
-                if (this.state.in_game){
-                    this.state.paused = true;
-                    this.state.in_game = false;
-                    this.showGameOver();
-                    let restart_button = document.getElementById('restart')
-                    if (restart_button != null){
-                        restart_button.addEventListener('click', function() {
-                            
-                            //chrome.storage.local.set({ 'high_score': counter }, {})
-                            parent.window.location.reload(true);
-                        }, false);
-                    }
-                    
+            var player = this.getObjectByName("Trex_" + this.state.style);
+            // Add obstacles to the scene
+            if (this.state.frames % 30 == 0){
+                var select = Math.floor(Math.random() * 2);
+                if (select == 0){
+                    this.loadObstacle("Bird_Original", 0);
+                } else {
+                    this.loadObstacle("Cactus1", 0);
                 }
             }
-        }
 
-        /********************* Move Scene Forward *********************/
-        // Move obstacles forward
-        for (var obstacle of this.state.obstacles){
-            obstacle.position.z -= this.state.speed;
-        }
-        // Move clouds forward
-        for (var cloud of this.state.clouds){
-            cloud.position.z -= (this.state.speed);
-        }
-        // Move scenery left forward
-        for (var item of this.state.scenery_left){
-            item.position.z -= (this.state.speed);
-        }
-        // Move scenery right forward
-        for (var item of this.state.scenery_right){
-            item.position.z -= (this.state.speed);
-        }
-        
-        /*********** Remove items and add new items to scene **********/
-        this.loadNewScenery(this.state.clouds, "clouds", null, 50);
-        this.loadNewScenery(this.state.scenery_left, "scenery", "left", 50);
-        this.loadNewScenery(this.state.scenery_right, "scenery", "right", 50);
+            // Check if there has been a collision
+            for (var obstacle of this.state.obstacles){
+                if (this.detectCollision(player, obstacle)){
+                    if (this.state.in_game){
+                        this.state.paused = true;
+                        this.state.in_game = false;
+                        this.showGameOver();
+                        let restart_button = document.getElementById('restart')
+                        if (restart_button != null){
+                            restart_button.addEventListener('click', function() {
+                                //chrome.storage.local.set({ 'high_score': counter }, {})
+                                parent.window.location.reload(true);
+                            }, false);
+                        }
+                    }
+                }
+            }
 
-        /*********** Update the score displayed **********/
-        this.updateScore(timeStamp);
-        // changes the score speed to increase at a slower rate the longer the
-        // game is played
-        this.state.score_speed = 800 + (timeStamp/1000);
+            /********************* Move Scene Forward *********************/
+            // Move obstacles forward
+            for (var obstacle of this.state.obstacles){
+                obstacle.position.z -= this.state.speed;
+            }
+            // Move clouds forward
+            for (var cloud of this.state.clouds){
+                cloud.position.z -= (this.state.speed);
+            }
+            // Move scenery left forward
+            for (var item of this.state.scenery_left){
+                item.position.z -= (this.state.speed);
+            }
+            // Move scenery right forward
+            for (var item of this.state.scenery_right){
+                item.position.z -= (this.state.speed);
+            }
 
+            // Remove obstacles behind dinosaur
+            this.removeObstacles(this.state.obstacles);
+            
+            /*********** Remove items and add new items to scene **********/
+            this.loadNewScenery(this.state.clouds, "clouds", null, 50);
+            this.loadNewScenery(this.state.scenery_left, "scenery", "left", 50);
+            this.loadNewScenery(this.state.scenery_right, "scenery", "right", 50);
+
+            /*********** Update the score displayed **********/
+            this.updateScore(timeStamp);
+            // changes the score speed to increase at a slower rate the longer the
+            // game is played
+            this.state.score_speed = 800 + (timeStamp/1000);
         }
     }
 
@@ -468,7 +481,7 @@ class SeedScene extends Scene {
             align-items: left;
             margin: -15px 30px;
             text-align: center;
-            font-size: 25px;
+            font-size: 20px;
             z-index: 999;
         `;
 
@@ -482,7 +495,7 @@ class SeedScene extends Scene {
                 this.state.high_score = append_string;
             }
         }
-        document.getElementById("score-text").innerText = "HI  " + this.state.high_score + "  " + this.state.score;
+        document.getElementById("score-text").innerText = this.state.score;
     }
     
     /**
