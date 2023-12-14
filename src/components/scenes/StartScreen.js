@@ -1,3 +1,5 @@
+import dinoImage from './dinotest.jpg';
+
 // StartScreen.js
 export default class StartScreen {
     constructor(startGameCallback) {
