@@ -38,7 +38,8 @@ class SeedScene extends Scene {
             score: "00000",
             score_speed: 800,
             high_score: "00000",
-            start_adj: 0
+            start_adj: 0,
+            pause_start: 0
         };
 
         // Populate GUI
@@ -245,12 +246,22 @@ class SeedScene extends Scene {
     }
 
     update(timeStamp) {
-        if (!this.state.in_game || this.state.paused){
+        if (!this.state.in_game){
+            return;
+        }
+        else if (this.state.paused){
+            if (this.state.pause_start == 0){
+                this.state.pause_start = timeStamp;
+            }
             return;
         }
         else{
             if (this.state.start_adj == 0){
                 this.state.start_adj = timeStamp;
+            }
+            if (this.state.pause_start != 0){
+                this.state.start_adj += timeStamp-this.state.pause_start;
+                this.state.pause_start = 0;
             }
             const { rotationSpeed, updateList } = this.state;
             this.state.frames += 1;
