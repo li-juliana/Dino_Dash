@@ -402,10 +402,6 @@ class SeedScene extends Scene {
             const max_vec_p = new THREE.Vector3(player_box.max.x + player_pos.x, player_box.max.y + player_pos.y, player_box.max.z + player_pos.z);
             const min_vec_o = new THREE.Vector3(-offset_amount_bird.x + object_pos.x, -offset_amount_bird.y + object_pos.y, -offset_amount_bird.z + object_pos.z);
             const max_vec_o = new THREE.Vector3(offset_amount_bird.x + object_pos.x, offset_amount_bird.y + object_pos.y, offset_amount_bird.z + object_pos.z);
-            if (this.checkBoxIntersect(min_vec_p, max_vec_p, min_vec_o, max_vec_o)){
-                console.log(player_pos)
-                console.log(obstacle.position)
-            }
             return this.checkBoxIntersect(min_vec_p, max_vec_p, min_vec_o, max_vec_o);
 
         }
@@ -640,7 +636,6 @@ class SeedScene extends Scene {
             if (this.state.score > 0 && this.state.score % 100 == 0){
                 if (this.state.spawn_rate > 45){
                     this.state.spawn_rate -= 10;
-                    console.log(this.state.spawn_rate);
                 }
             }
         }
