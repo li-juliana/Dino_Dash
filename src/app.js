@@ -10,9 +10,21 @@ import { WebGLRenderer, PerspectiveCamera, Vector3 } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { SeedScene } from 'scenes';
 import * as event_handlers from './js/EventHandlers.js';
+import StartScreen from './components/scenes/StartScreen.js';
+
+/********************* Initialize Start Screen **************************/
+const startScreen = new StartScreen(startGame);
+
+/*********************** Start Game Function ***************************/
+let scene = null; 
+
+function startGame() {
+    startScreen.hide();
+    scene = new SeedScene();
+    scene.startGame()    
+}
 
 /***************** Initialize core ThreeJS components *****************/
-const scene = new SeedScene();
 const camera = new PerspectiveCamera();
 const renderer = new WebGLRenderer({ antialias: true });
 
@@ -39,13 +51,14 @@ controls.update();
 /*********************** Render loop **********************************/
 const onAnimationFrameHandler = (timeStamp) => {
     controls.update();
-    renderer.render(scene, camera);
-    scene.update && scene.update(timeStamp);
+    if (scene) { // Check if SeedScene has been initialized
+        renderer.render(scene, camera);
+        scene.update && scene.update(timeStamp);
+        event_handlers.handleMovement(scene);
+    }
     window.requestAnimationFrame(onAnimationFrameHandler);
-    event_handlers.handleMovement(scene);
 };
 window.requestAnimationFrame(onAnimationFrameHandler);
-
 /*********************** Resize Handler *******************************/
 const windowResizeHandler = () => {
     const { innerHeight, innerWidth } = window;
@@ -59,4 +72,3 @@ windowResizeHandler();
 window.addEventListener('resize', windowResizeHandler, false);
 window.addEventListener('keydown', event_handlers.handleKeyDown, false);
 window.addEventListener('keyup', event_handlers.handleKeyUp, false);
-

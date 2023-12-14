@@ -16,7 +16,10 @@ class SeedScene extends Scene {
         // Call parent Scene() constructor
         super();
 
-        // Init state
+        this.gameStarted = false;
+        this.gamePaused = false;
+
+        // Init state of game
         this.state = {
             frames: 0,
             gui: new Dat.GUI(), // Create GUI for scene
@@ -50,23 +53,23 @@ class SeedScene extends Scene {
         // Add available scenery options
         this.state.scenery_options = ["Tree1", "Tree4",  "Rock1",  "Rock2", "Grass2", "Bush1", "Flower"];
         this.state.speed = 0.5;
-
         this.createScoreboard();
+
 
         /******************** Add Meshes to Scene *********************/
         player_style.onChange((value) => this.switchStyles(value));
 
-        // Add floor and scene right / left
+        // Add floor and lights
         const lights = new BasicLights();
+        var floor = new Land2();
+        this.add(lights, floor);
+
+        // Add scene right and left
         var scene_right = new Land();
         scene_right.position.x = -175;
         var scene_left = new Land();
         scene_left.position.x = 175;
-        this.add(lights, scene_right, scene_left);
-
-        // Add floor
-        var floor = new Land2();
-        this.add(floor);
+        this.add(scene_right, scene_left);
 
         // Add items to scene right
         for (var j = 0; j < 100; j++){
@@ -242,7 +245,7 @@ class SeedScene extends Scene {
     }
 
     update(timeStamp) {
-        if (this.state.paused){
+        if (this.state.paused || !this.gameStarted){
             return;
         }
         else{
@@ -497,6 +500,95 @@ class SeedScene extends Scene {
         }
         document.getElementById("score-text").innerText = this.state.score;
     }
+
+    /**
+     * Start the game by setting the gameStarted flag to true.
+     */
+    startGame() {
+        this.gameStarted = true;
+    }
+
+    handleKeyDown(event) {
+        if (event.key === 'Escape') {
+            this.togglePause();
+        }
+    }
+
+    togglePause() {
+        // Toggle the game pause state
+        this.gamePaused = !this.gamePaused;
+
+        // Show/hide the pause popup
+        if (this.gamePaused) {
+            this.showPausePopup();
+        } else {
+            this.hidePausePopup();
+        }
+    }
+
+    showPausePopup() {
+        // Create overlay
+        const overlay = document.createElement('div');
+        overlay.id = 'overlay';
+        document.body.appendChild(overlay);
+    
+        // Create and show the pause modal
+        const modal = document.createElement('div');
+        modal.id = 'pause-popup';
+        modal.innerHTML = `
+        <div class="col" style="font-family: Papyrus;">
+            <h1> Game Paused</h1>
+            <p style="font-family: Times New Roman;">Press Esc to keep playing!</p>
+        </div>
+        `;
+        document.body.appendChild(modal);
+
+        // Add styles
+        overlay.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+        `;
+
+        modal.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 50%;
+            height: 50%;
+            background: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 150px 300px;
+            border-radius: 10px;
+            text-align: center;
+            z-index: 999;
+        `;
+    
+    }
+
+    hidePausePopup() {
+        // Remove the overlay and the pause modal
+        const overlay = document.getElementById('overlay');
+        const modal = document.getElementById('pause-popup');
+        
+        if (modal) {
+            document.body.removeChild(modal);
+        }
+
+        if (overlay) {
+            document.body.removeChild(overlay);
+        }
+    }
+    
     
     /**
      * Updates the score to increase the longer a player stays in the game
@@ -521,3 +613,4 @@ class SeedScene extends Scene {
 }
 
 export default SeedScene;
+
