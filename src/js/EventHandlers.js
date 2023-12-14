@@ -97,7 +97,7 @@ export function handleMovement(scene){
     const fallDownCartoon = new TWEEN.Tween(player.position).to({ y: -0.4}, 400).easing(TWEEN.Easing.Quadratic.In);
     
     // Movement along the x-axis
-    if(keys.left.pressed && !scene.state.gamePaused){
+    if(keys.left.pressed && !scene.state.gamePaused && scene.state.in_game){
         // Only move left if still on the land
         if (player.position.x + 0.05 <= land.scale.x + offset){
             if (scene.state.style == "Realistic"){
@@ -106,7 +106,7 @@ export function handleMovement(scene){
                 player.position.x += 0.05;
             }
         }
-    } else if (keys.right.pressed && !scene.state.gamePaused){
+    } else if (keys.right.pressed && !scene.state.gamePaused &&  scene.state.in_game){
         // Only move right if still on the land
         if (player.position.x - 0.05 >= -1 * land.scale.x - offset){
             if (scene.state.style == "Realistic"){
