@@ -20,7 +20,6 @@ class SeedScene extends Scene {
         this.state = {
             frames: 0,
             gui: new Dat.GUI(), // Create GUI for scene
-            rotationSpeed: 0, // TODO: change back to 1 later
             updateList: [],
             prev_timestamp: null,
             style: style,
@@ -42,9 +41,6 @@ class SeedScene extends Scene {
             start_adj: 0,
             pause_start: 0
         };
-
-        // Populate GUI
-        this.state.gui.add(this.state, 'rotationSpeed', -5, 5);
         
         // Set background to a nice color
         this.background = new Color(0x7ec0ee);
@@ -282,9 +278,8 @@ class SeedScene extends Scene {
                 this.state.start_adj += timeStamp-this.state.pause_start;
                 this.state.pause_start = 0;
             }
-            const { rotationSpeed, updateList } = this.state;
+            const { updateList } = this.state;
             this.state.frames += 1;
-            this.rotation.y = (rotationSpeed * timeStamp) / 10000;
             // Call update for each object in the updateList
             for (const obj of updateList) {
                 obj.update(timeStamp);
@@ -294,7 +289,7 @@ class SeedScene extends Scene {
             // Add obstacles to the scene
             if (this.state.frames % this.state.spawn_rate == 0){
                 let select;
-                if (this.state.score < 100){
+                if (this.state.score < 50){
                     select = 0;
                 } else {
                     select = Math.floor(Math.random() * 2);
@@ -564,9 +559,18 @@ class SeedScene extends Scene {
         <div class="col" style="font-family: Courier;">
             <h1> Game Paused</h1>
             <p>Press Esc to keep playing!</p>
+            <button id="returnHome"> Return to Homepage </button>
         </div>
         `;
         document.body.appendChild(modal);
+        let returnHome = document.getElementById('returnHome');
+        console.log(returnHome);
+        if (returnHome != null){
+            returnHome.addEventListener('click', function() {
+                console.log(returnHome);
+                parent.window.location.reload(true);
+            }, false);
+        }
 
         // Add styles
         overlay.style.cssText = `
