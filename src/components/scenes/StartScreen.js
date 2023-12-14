@@ -2,6 +2,7 @@
 export default class StartScreen {
     constructor(startGameCallback) {
         this.active = true;
+        this.style = null;
         this.startGameCallback = startGameCallback;
         this.container = document.createElement('div');
         this.container.id = 'start-screen';
@@ -19,7 +20,7 @@ export default class StartScreen {
                     <br>
                     3) Avoid obstacles. The game ends when you land on an obstacle.
                     <br>
-                <p> Press Enter to get started! </p>
+                <p> Select a player to get started! </p>
             </div>
             <div class="col" style="text-align: center">
             </div>
@@ -32,8 +33,24 @@ export default class StartScreen {
         
         document.body.appendChild(this.container);
 
-        // Add event listener for the "Enter" key
-        document.addEventListener('keydown', this.handleKeyPress.bind(this));
+        // Add event listeners for the style buttons
+        const originalButton = document.createElement('button');
+        originalButton.innerText = 'Original';
+        originalButton.addEventListener('click', () => this.handleStyleButtonClick('Original'));
+
+        const cartoonButton = document.createElement('button');
+        cartoonButton.innerText = 'Cartoon';
+        cartoonButton.addEventListener('click', () => this.handleStyleButtonClick('Cartoon'));
+
+        const realisticButton = document.createElement('button');
+        realisticButton.innerText = 'Realistic';
+        realisticButton.addEventListener('click', () => this.handleStyleButtonClick('Realistic'));
+
+        // Add buttons to the container
+        const styleContainer = this.container.querySelector('.col');
+        styleContainer.appendChild(originalButton);
+        styleContainer.appendChild(cartoonButton);
+        styleContainer.appendChild(realisticButton);
     }
 
     hide() {
@@ -44,10 +61,9 @@ export default class StartScreen {
         this.container.style.display = 'block';
     }
 
-    handleKeyPress(event) {
-        if (event.key === 'Enter' && this.active) {
-            this.startGameCallback();
-        }
+    handleStyleButtonClick(style) {
+        this.style = style;
+        this.startGameCallback();
     }
 }
 

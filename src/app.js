@@ -14,15 +14,14 @@ import StartScreen from './components/scenes/StartScreen.js';
 
 /********************* Initialize Start Screen **************************/
 const startScreen = new StartScreen(startGame);
+let scene; 
 
 /*********************** Start Game Function ***************************/
-let scene = null; 
-
 function startGame() {
     startScreen.hide();
     startScreen.active = false;
-    scene = new SeedScene();
-    scene.startGame()    
+    scene = new SeedScene(startScreen.style);
+    scene.startGame()
 }
 
 /***************** Initialize core ThreeJS components *****************/
