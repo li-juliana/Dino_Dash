@@ -50,7 +50,7 @@ class SeedScene extends Scene {
 
         // Add available scenery options
         this.state.scenery_options = ["Tree1", "Tree4",  "Rock1",  "Rock2", "Grass2", "Bush1", "Flower"];
-        this.state.speed = 1;
+        this.state.speed = 0.5;
         this.createScoreboard();
 
 
@@ -264,11 +264,16 @@ class SeedScene extends Scene {
             var player = this.state.current_player;
             // Add obstacles to the scene
             if (this.state.frames % 30 == 0){
-                var select = Math.floor(Math.random() * 2);
-                if (select == 0){
-                    this.loadObstacle("Bird_" + this.state.style, 0);
+                let select;
+                if (this.state.score < 50){
+                    select = 0;
                 } else {
+                    select = Math.floor(Math.random() * 2);
+                }
+                if (select == 0){
                     this.loadObstacle("Cactus1", 0);
+                } else {
+                    this.loadObstacle("Bird_" + this.state.style, 0);
                 }
             }
 
