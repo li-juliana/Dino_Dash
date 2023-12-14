@@ -418,7 +418,7 @@ class SeedScene extends Scene {
         modal.innerHTML = `
         <div class="col" style="font-family: Papyrus;">
             <h1> Game Over</h1>
-            <button id="restart"><img src=""></button>
+            <button id="restart">Try Again!</button>
         </div>`;
         document.body.appendChild(modal);
 
@@ -438,19 +438,27 @@ class SeedScene extends Scene {
 
         modal.style.cssText = `
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 40%;
+            top: 40%;
+            left: 35%;
+            width: 35%;
             height: 30%;
             background: white;
             display: flex;
             justify-content: center;
             align-items: center;
-            margin: 150px 300px;
+            margin: auto;
             border-radius: 10px;
             text-align: center;
             z-index: 999;
         `;
+
+        let restart_button = document.getElementById('restart');
+        restart_button.style.cssText = `
+            width: 50%;
+            height: 30%;
+            font-family: Papyrus;
+            `;
+
         if (Number(this.state.score) > this.state.high_score){
             window.localStorage.setItem("high_score", Number(this.state.score));
         }
