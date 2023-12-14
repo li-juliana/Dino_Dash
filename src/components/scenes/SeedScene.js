@@ -389,7 +389,7 @@ class SeedScene extends Scene {
         modal.innerHTML = `
         <div class="col" style="font-family: Courier;">
             <h1> Game Over</h1>
-            <button id="restart">Try Again!</button>
+            <button id="restart">Play Again!</button>
         </div>`;
         document.body.appendChild(modal);
 
