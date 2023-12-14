@@ -633,7 +633,7 @@ class SeedScene extends Scene {
 
             this.state.score = append_string;
             document.getElementById("score-text").innerText = this.state.score;
-            if (this.state.score > 0 && this.state.score % 100 == 0){
+            if (this.state.score > 0 && this.state.score % 50 == 0){
                 if (this.state.spawn_rate > 45){
                     this.state.spawn_rate -= 10;
                 }
