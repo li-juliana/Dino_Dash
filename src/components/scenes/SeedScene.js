@@ -23,7 +23,6 @@ class SeedScene extends Scene {
             rotationSpeed: 0, // TODO: change back to 1 later
             updateList: [],
             prev_timestamp: null,
-            in_game: false,
             style: "Original",
             current_style: "Original",
             player_options: [],
@@ -34,7 +33,8 @@ class SeedScene extends Scene {
             scenery_options: null,
             clouds: [],
             speed: null,
-            paused: false,
+            in_game: false,
+            gamePaused: false,
             score: "00000",
             score_speed: 800,
             high_score: "00000",
@@ -94,6 +94,7 @@ class SeedScene extends Scene {
         const bird_realistic = new Bird_Realistic(this);
         this.state.obstacle_options.push(bird_original, bird_cartoon, bird_realistic);
 
+        // Add event listener for the "keydown" event to detect "Esc" key
         document.addEventListener('keydown', this.handleKeyDown.bind(this));
     }
 
@@ -246,13 +247,7 @@ class SeedScene extends Scene {
     }
 
     update(timeStamp) {
-        if (!this.state.in_game){
-            return;
-        }
-        else if (this.state.paused){
-            if (this.state.pause_start == 0){
-                this.state.pause_start = timeStamp;
-            }
+        if ((this.state.gamePaused || !this.state.in_game) || !this.state.in_game){
             return;
         }
         else{
@@ -524,7 +519,7 @@ class SeedScene extends Scene {
     }
 
     /**
-     * Start the game by setting the gameStarted flag to true.
+     * Start the game by setting the in_game flag to true.
      */
     startGame() {
         this.state.in_game = true;
@@ -538,10 +533,10 @@ class SeedScene extends Scene {
 
     togglePause() {
         // Toggle the game pause state
-        this.state.paused = !this.state.paused;
+        this.state.gamePaused = !this.state.gamePaused;
 
         // Show/hide the pause popup
-        if (this.state.paused) {
+        if (this.state.gamePaused) {
             this.showPausePopup();
         } else {
             this.hidePausePopup();
