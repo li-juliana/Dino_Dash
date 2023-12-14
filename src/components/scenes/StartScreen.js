@@ -1,4 +1,4 @@
-import dinoImage from './dinotest3.png';
+import dinoImage from './dinotest4.png';
 
 // StartScreen.js
 export default class StartScreen {
@@ -22,12 +22,11 @@ export default class StartScreen {
 
         this.container.innerHTML = `
         <div class="row" style="max-width: 700px;">
-            <div class="col" id="title" style="font-family: Courier; text-align: left; position: absolute; top: 0px; left: 20px; max-width: 300px; color: white;">
-                <h1 style="font-size: 50px">Dino Dash</h1>
-                <hr>
-                <h2 style="font-size: 20px">No wifi? No problem! Take a trip back to the dark ages with Dino Dash.</h2>
+            <div class="col" id="title" style="font-family: Courier; text-align: left; position: absolute; top: 20px; left: 20px; max-width: 300px; color: white;">
+                <h2 style="font-size: 50px">Dino Dash</h2>
+                <h3 style="font-size: 20px">No wifi? No problem! Travel back to the Dark Ages with Dino Dash.</h3>
             </div>
-            <div class="col" id="instructions" style="font-family: Courier; text-align: center; position: absolute; bottom: 30px; right: 20px; max-width: 520px; color: white;">
+            <div class="col" id="instructions" style="font-family: Courier; text-align: center; position: absolute; bottom: 30px; left: 20px; max-width: 430px; color: white;">
                 <h2 style="font-size: 30px">How to play:</h2>
                 <hr>
                 <h3>
@@ -58,14 +57,17 @@ export default class StartScreen {
         // Add event listeners for the style buttons
         const originalButton = document.createElement('button');
         originalButton.innerText = 'Original';
+        originalButton.style.margin = '20px';
         originalButton.addEventListener('click', () => this.handleStyleButtonClick('Original'));
 
         const cartoonButton = document.createElement('button');
         cartoonButton.innerText = 'Cartoon';
+        cartoonButton.style.margin = '20px';
         cartoonButton.addEventListener('click', () => this.handleStyleButtonClick('Cartoon'));
 
         const realisticButton = document.createElement('button');
         realisticButton.innerText = 'Realistic';
+        realisticButton.style.margin = '20px';
         realisticButton.addEventListener('click', () => this.handleStyleButtonClick('Realistic'));
 
         // Add buttons to the container
