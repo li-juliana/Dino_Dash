@@ -1,4 +1,4 @@
-import dinoImage from './dinotest.jpg';
+import dinoImage from './dinotest3.png';
 
 // StartScreen.js
 export default class StartScreen {
@@ -17,11 +17,11 @@ export default class StartScreen {
         this.container.id = 'start-screen';
         
         this.container.style.backgroundImage = `url(${dinoImage})`;
-        this.container.style.backgroundSize = 'cover';
+        this.container.style.backgroundSize = 'contain';
         this.container.style.backgroundRepeat = 'no-repeat';
 
         this.container.innerHTML = `
-        <div class="row">
+        <div class="row" style="max-width: 700px">
             <div class="col" style="font-family: Courier; text-align: center; padding: 200px;">
                 <h1>Dino Dash</h1>
                 <p>No wifi? No problem! Take a trip back to the dark ages with Dino Dash.</p>
@@ -32,7 +32,9 @@ export default class StartScreen {
                     <br>
                     2) Use the spacebar or the up arrow to jump up
                     <br>
-                    3) Avoid obstacles. The game ends when you land on an obstacle.
+                    3) Avoid obstacles. There will be more obstacles as the game continues
+                    <br>
+                    4) The game ends when you hit an obstacle
                     <br>
                 <p> Select a player to get started! </p>
             </div>
