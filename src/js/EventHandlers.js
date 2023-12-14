@@ -106,7 +106,7 @@ export function handleMovement(scene){
                 player.position.x += 0.05;
             }
         }
-    } else if (keys.right.pressed && !scene.state.gamePaused &&  scene.state.in_game){
+    } else if (keys.right.pressed && !scene.state.gamePaused && scene.state.in_game){
         // Only move right if still on the land
         if (player.position.x - 0.05 >= -1 * land.scale.x - offset){
             if (scene.state.style == "Realistic"){
@@ -119,10 +119,10 @@ export function handleMovement(scene){
     
     // Movement along the y-axis
     // Only jump if the dinosaur is on floor (prevents floating)
-    if (keys.jump.pressed && player.position.y == floor_y && !scene.state.gamePaused){
+    if (keys.jump.pressed && player.position.y == floor_y && !scene.state.gamePaused && scene.state.in_game){
         jumpUp.onComplete(() => fallDown.start());
         jumpUp.start();
-    } else if (player.name == "Trex_Cartoon" && keys.jump.pressed && Math.abs(player.position.y + 0.4) <= EPS && !scene.state.gamePaused) {
+    } else if (player.name == "Trex_Cartoon" && keys.jump.pressed && Math.abs(player.position.y + 0.4) <= EPS && !scene.state.gamePaused && scene.state.in_game) {
         jumpUpCartoon.onComplete(() => fallDownCartoon.start());
         jumpUpCartoon.start();
     }
