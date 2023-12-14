@@ -20,6 +20,7 @@ let scene = null;
 
 function startGame() {
     startScreen.hide();
+    startScreen.active = false;
     scene = new SeedScene();
     scene.startGame()    
 }

@@ -425,7 +425,7 @@ class SeedScene extends Scene {
         const modal = document.createElement('div');
         modal.id = 'game-over-popup';
         modal.innerHTML = `
-        <div class="col" style="font-family: Papyrus;">
+        <div class="col" style="font-family: Courier;">
             <h1> Game Over</h1>
             <button id="restart">Try Again!</button>
         </div>`;
@@ -465,7 +465,7 @@ class SeedScene extends Scene {
         restart_button.style.cssText = `
             width: 50%;
             height: 30%;
-            font-family: Papyrus;
+            font-family: Courier;
             `;
 
         if (Number(this.state.score) > this.state.high_score){
@@ -477,7 +477,6 @@ class SeedScene extends Scene {
      * Creates the initial top left scoreboard that's displayed
      */
     createScoreboard(){
-
         const score_overlay = document.createElement('div');
         score_overlay.id = 'score_overlay';
         document.body.appendChild(score_overlay);
@@ -485,23 +484,25 @@ class SeedScene extends Scene {
         const panel_modal = document.createElement('div');
         panel_modal.id = 'score-panel';
         panel_modal.innerHTML = `
-        <div class="col" style="font-family: Papyrus;">
-            <h1 id = "score-text"></h1>
+        <div class="col" style="font-family: Courier;">
+            <h2 id = "score-text" style="color:#36454F"></h2>
+            <h2 id = "high-score-text" style="color:#36454F"></h2>
         </div>`;
         document.body.appendChild(panel_modal);
+        // Add styles
         panel_modal.style.cssText = `
             position: fixed;
             top: 0;
             left: 0;
             width: 80%;
             height: 20%;
-            background: rgba(0,0,0,0);
+            background: rgba(200,200,200,0);
             display: flex;
             justify-content: left;
-            align-items: left;
-            margin: -15px 30px;
+            align-items: right;
+            margin: 0px 30px;
             text-align: center;
-            font-size: 20px;
+            font-size: 15px;
             z-index: 999;
         `;
 
@@ -515,7 +516,8 @@ class SeedScene extends Scene {
                 this.state.high_score = append_string;
             }
         }
-        document.getElementById("score-text").innerText = "HI  " + this.state.high_score + "  " + this.state.score;;
+        document.getElementById("score-text").innerText = this.state.score;
+        document.getElementById("high-score-text").innerText = "High Score  " + this.state.high_score;
     }
 
     /**
@@ -553,9 +555,9 @@ class SeedScene extends Scene {
         const modal = document.createElement('div');
         modal.id = 'pause-popup';
         modal.innerHTML = `
-        <div class="col" style="font-family: Papyrus;">
+        <div class="col" style="font-family: Courier;">
             <h1> Game Paused</h1>
-            <p style="font-family: Times New Roman;">Press Esc to keep playing!</p>
+            <p>Press Esc to keep playing!</p>
         </div>
         `;
         document.body.appendChild(modal);
@@ -621,7 +623,7 @@ class SeedScene extends Scene {
             }
 
             this.state.score = append_string;
-            document.getElementById("score-text").innerText = "HI  " + this.state.high_score + "  " + this.state.score;
+            document.getElementById("score-text").innerText = this.state.score;
         }
     }
     

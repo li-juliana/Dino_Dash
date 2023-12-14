@@ -20,7 +20,7 @@ const keys = {
 };
 
 /******************** Handle Keyboard Controls ************************/
-export function handleKeyDown(event){
+export function handleKeyDown(event, scene){
     // Ignore keypresses typed into a text box
     if (event.target.tagName === "INPUT") {
         return;
