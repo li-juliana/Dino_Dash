@@ -387,7 +387,9 @@ class SeedScene extends Scene {
      * @param {!THREE.Vector3} max2 (obstacle min bounding box vector)
      */
     checkBoxIntersect(min1, max1, min2, max2){
-        if ((max1.x <= min2.x || max2.x <= min1.x) || (max2.y <= min1.y) || (max1.z <= min2.z || max2.z <= min1.z)){
+        let y_adj = 1
+        let z_adj = 0.2
+        if ((max1.x <= min2.x || max2.x <= min1.x) || (max2.y-y_adj <= min1.y) || (max1.z-z_adj <= min2.z || max2.z-z_adj <= min1.z)){
             return false;
         }
         else{
@@ -405,13 +407,20 @@ class SeedScene extends Scene {
     detectCollision(player, obstacle){
         const player_box = player.state.box;
         const player_pos = player.position;
-        const offset_amount_bird = {x: 0.7, y:0.1, z:0.1};
+        let offset_amount;
+        if (this.name == "Cactus1"){
+            offset_amount = {x: 0.1, y:0.3, z:0.1}
+        }
+        else{
+            offset_amount = {x: 0.7, y:0.1, z:0.1};
+        }
+        
         if (player_box != null && player_pos != null){
             const object_pos = obstacle.position;
             const min_vec_p = new THREE.Vector3(player_box.min.x + player_pos.x, player_box.min.y + player_pos.y, player_box.min.z + player_pos.z);
             const max_vec_p = new THREE.Vector3(player_box.max.x + player_pos.x, player_box.max.y + player_pos.y, player_box.max.z + player_pos.z);
-            const min_vec_o = new THREE.Vector3(-offset_amount_bird.x + object_pos.x, -offset_amount_bird.y + object_pos.y, -offset_amount_bird.z + object_pos.z);
-            const max_vec_o = new THREE.Vector3(offset_amount_bird.x + object_pos.x, offset_amount_bird.y + object_pos.y, offset_amount_bird.z + object_pos.z);
+            const min_vec_o = new THREE.Vector3(-offset_amount.x + object_pos.x, -offset_amount.y + object_pos.y, -offset_amount.z + object_pos.z);
+            const max_vec_o = new THREE.Vector3(offset_amount.x + object_pos.x, offset_amount.y + object_pos.y, offset_amount.z + object_pos.z);
             return this.checkBoxIntersect(min_vec_p, max_vec_p, min_vec_o, max_vec_o);
 
         }
