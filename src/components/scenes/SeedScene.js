@@ -16,9 +16,6 @@ class SeedScene extends Scene {
         // Call parent Scene() constructor
         super();
 
-        this.gameStarted = false;
-        this.gamePaused = false;
-
         // Init state of game
         this.state = {
             frames: 0,
@@ -26,7 +23,7 @@ class SeedScene extends Scene {
             rotationSpeed: 0, // TODO: change back to 1 later
             updateList: [],
             prev_timestamp: null,
-            in_game: true,
+            in_game: false,
             style: "Original",
             current_style: "Original",
             player_options: [],
@@ -40,7 +37,8 @@ class SeedScene extends Scene {
             paused: false,
             score: "00000",
             score_speed: 800,
-            high_score: "00000"
+            high_score: "00000",
+            start_adj: 0
         };
 
         // Populate GUI
@@ -245,10 +243,13 @@ class SeedScene extends Scene {
     }
 
     update(timeStamp) {
-        if (this.state.paused || !this.gameStarted){
+        if (!this.state.in_game || this.state.paused){
             return;
         }
         else{
+            if (this.state.start_adj == 0){
+                this.state.start_adj = timeStamp;
+            }
             const { rotationSpeed, updateList } = this.state;
             this.state.frames += 1;
             this.rotation.y = (rotationSpeed * timeStamp) / 10000;
@@ -313,10 +314,10 @@ class SeedScene extends Scene {
             this.loadNewScenery(this.state.scenery_right, "scenery", "right", 50);
 
             /*********** Update the score displayed **********/
-            this.updateScore(timeStamp);
+            this.updateScore((timeStamp-this.state.start_adj));
             // changes the score speed to increase at a slower rate the longer the
             // game is played
-            this.state.score_speed = 800 + (timeStamp/1000);
+            this.state.score_speed = 800 + ((timeStamp-this.state.start_adj)/1000);
         }
     }
 
@@ -441,7 +442,7 @@ class SeedScene extends Scene {
             top: 40%;
             left: 35%;
             width: 35%;
-            height: 30%;
+            height: 25%;
             background: white;
             display: flex;
             justify-content: center;
@@ -513,7 +514,7 @@ class SeedScene extends Scene {
      * Start the game by setting the gameStarted flag to true.
      */
     startGame() {
-        this.gameStarted = true;
+        this.state.in_game = true;
     }
 
     handleKeyDown(event) {
@@ -524,10 +525,10 @@ class SeedScene extends Scene {
 
     togglePause() {
         // Toggle the game pause state
-        this.gamePaused = !this.gamePaused;
+        this.state.paused = !this.state.paused;
 
         // Show/hide the pause popup
-        if (this.gamePaused) {
+        if (this.state.paused) {
             this.showPausePopup();
         } else {
             this.hidePausePopup();
