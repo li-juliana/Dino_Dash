@@ -437,19 +437,23 @@ class SeedScene extends Scene {
         `;
 
         modal.style.cssText = `
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 40%;
-            height: 30%;
-            background: white;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: 150px 300px;
-            border-radius: 10px;
-            text-align: center;
-            z-index: 999;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 30%;
+        height: 30%;
+        transform: translate(-50%, -50%);
+        background: #7ec0ee;
+        color: rgba(199,252,105,1);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 10px;
+        border-width: 10px;
+        border-style: solid;
+        border-color: rgba(255,255,170,1);
+        text-align: center;
+        z-index: 999;
         `;
         if (Number(this.state.score) > this.state.high_score){
             window.localStorage.setItem("high_score", Number(this.state.score));
