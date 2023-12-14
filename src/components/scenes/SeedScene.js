@@ -12,7 +12,7 @@ class SeedScene extends Scene {
      /*
      * Load initial scene and intiial settings
      */
-    constructor() {
+    constructor(style) {
         // Call parent Scene() constructor
         super();
 
@@ -23,8 +23,8 @@ class SeedScene extends Scene {
             rotationSpeed: 0, // TODO: change back to 1 later
             updateList: [],
             prev_timestamp: null,
-            style: "Original",
-            current_style: "Original",
+            style: style,
+            current_player: null,
             player_options: [],
             obstacle_options: [],
             obstacles: [],
@@ -44,20 +44,17 @@ class SeedScene extends Scene {
 
         // Populate GUI
         this.state.gui.add(this.state, 'rotationSpeed', -5, 5);
-        var player_style = this.state.gui.add(this.state, 'style', ["Original", "Cartoon", "Realistic"]).name('Style');
         
         // Set background to a nice color
         this.background = new Color(0x7ec0ee);
 
         // Add available scenery options
         this.state.scenery_options = ["Tree1", "Tree4",  "Rock1",  "Rock2", "Grass2", "Bush1", "Flower"];
-        this.state.speed = 0.5;
+        this.state.speed = 1;
         this.createScoreboard();
 
 
         /******************** Add Meshes to Scene *********************/
-        player_style.onChange((value) => this.switchStyles(value));
-
         // Add floor and lights
         const lights = new BasicLights();
         var floor = new Land2();
@@ -81,18 +78,16 @@ class SeedScene extends Scene {
             this.loadCloud(0);
         }
 
-        // Add dinosaur
+        // Add dinosaur and bird obstacle
         var dino_original = new Trex_Original(this);
         var dino_cartoon = new Trex_Cartoon(this);
         var dino_realistic = new Trex_Realistic(this);
         this.state.player_options.push(dino_original, dino_cartoon, dino_realistic);
-        this.add(dino_original)
-
-        // Add bird dinosaur obstacles
         const bird_original = new Bird_Original(this);
         const bird_cartoon = new Bird_Cartoon(this);
         const bird_realistic = new Bird_Realistic(this);
         this.state.obstacle_options.push(bird_original, bird_cartoon, bird_realistic);
+        this.selectCorrectPlayer();
 
         // Add event listener for the "keydown" event to detect "Esc" key
         document.addEventListener('keydown', this.handleKeyDown.bind(this));
@@ -266,12 +261,12 @@ class SeedScene extends Scene {
                 obj.update(timeStamp);
             }
 
-            var player = this.getObjectByName("Trex_" + this.state.style);
+            var player = this.state.current_player;
             // Add obstacles to the scene
             if (this.state.frames % 30 == 0){
                 var select = Math.floor(Math.random() * 2);
                 if (select == 0){
-                    this.loadObstacle("Bird_Original", 0);
+                    this.loadObstacle("Bird_" + this.state.style, 0);
                 } else {
                     this.loadObstacle("Cactus1", 0);
                 }
@@ -329,49 +324,16 @@ class SeedScene extends Scene {
         }
     }
 
-    switchStyles(style){
-        // var desired_player = "Trex_" + style;
-        // var current_player = "Trex_" + this.state.current_style;
+    selectCorrectPlayer(){
+        var desired_player = "Trex_" + this.state.style;
 
-        // var desired_obstacle = "Bird_" + style;
-        // var current_obstacle = "Bird_" + this.state.current_style;
-
-        // // TODO: Need to add and remove cactus styles after adding cactus to game
-
-        // let remove_player;
-        // let remove_obstacle;
-        // this.children.forEach(element => {
-        //     // Find the current dinosaur from the scene to remove
-        //     if (element.name == current_player) {
-        //         remove_player = element;
-        //     }
-        //     // Find the current bird obstacle from the scene to remove
-        //     if (element.name == current_obstacle){
-        //         remove_obstacle = element;
-        //     }
-        // });
-        // if (remove_player != null){
-        //     this.remove(remove_player);
-        // }
-        // if (remove_obstacle != null){
-        //     this.remove(remove_obstacle);
-        // }
-        
-        // // Add desired player to scene
-        // this.state.player_options.forEach(element => {
-        //     if (element.name == desired_player){
-        //         this.add(element);
-        //     }
-        // });
-
-        // // Add desired bird obstacle to scene
-        // this.state.obstacle_options.forEach(element => {
-        //     if (element.name == desired_obstacle){
-        //         this.add(element);
-        //     }
-        // });
-        
-        // this.state.current_style = style;
+        // Add desired player to scene
+        this.state.player_options.forEach(element => {
+            if (element.name == desired_player){
+                this.add(element);
+                this.state.current_player = element;
+            }
+        });
     }
 
     /**
@@ -425,9 +387,9 @@ class SeedScene extends Scene {
         const modal = document.createElement('div');
         modal.id = 'game-over-popup';
         modal.innerHTML = `
-        <div class="col" style="font-family: Papyrus;">
+        <div class="col" style="font-family: Courier;">
             <h1> Game Over</h1>
-            <button id="restart">Try Again!</button>
+            <button id="restart">Play Again!</button>
         </div>`;
         document.body.appendChild(modal);
 
@@ -465,7 +427,7 @@ class SeedScene extends Scene {
         restart_button.style.cssText = `
             width: 50%;
             height: 30%;
-            font-family: Papyrus;
+            font-family: Courier;
             `;
 
         if (Number(this.state.score) > this.state.high_score){
@@ -477,7 +439,6 @@ class SeedScene extends Scene {
      * Creates the initial top left scoreboard that's displayed
      */
     createScoreboard(){
-
         const score_overlay = document.createElement('div');
         score_overlay.id = 'score_overlay';
         document.body.appendChild(score_overlay);
@@ -485,23 +446,25 @@ class SeedScene extends Scene {
         const panel_modal = document.createElement('div');
         panel_modal.id = 'score-panel';
         panel_modal.innerHTML = `
-        <div class="col" style="font-family: Papyrus;">
-            <h1 id = "score-text"></h1>
+        <div class="col" style="font-family: Courier;">
+            <h2 id = "score-text" style="color:#36454F"></h2>
+            <h2 id = "high-score-text" style="color:#36454F"></h2>
         </div>`;
         document.body.appendChild(panel_modal);
+        // Add styles
         panel_modal.style.cssText = `
             position: fixed;
             top: 0;
             left: 0;
             width: 80%;
             height: 20%;
-            background: rgba(0,0,0,0);
+            background: rgba(200,200,200,0);
             display: flex;
             justify-content: left;
-            align-items: left;
-            margin: -15px 30px;
+            align-items: right;
+            margin: 0px 30px;
             text-align: center;
-            font-size: 20px;
+            font-size: 15px;
             z-index: 999;
         `;
 
@@ -515,7 +478,8 @@ class SeedScene extends Scene {
                 this.state.high_score = append_string;
             }
         }
-        document.getElementById("score-text").innerText = "HI  " + this.state.high_score + "  " + this.state.score;;
+        document.getElementById("score-text").innerText = this.state.score;
+        document.getElementById("high-score-text").innerText = "High Score  " + this.state.high_score;
     }
 
     /**
@@ -529,17 +493,24 @@ class SeedScene extends Scene {
         if (event.key === 'Escape') {
             this.togglePause();
         }
+
+        // ignore button clicks when game paused
+        if (this.state.gamePaused && event.key !== 'Escape') {
+            return;
+        }
     }
 
     togglePause() {
-        // Toggle the game pause state
-        this.state.gamePaused = !this.state.gamePaused;
-
-        // Show/hide the pause popup
-        if (this.state.gamePaused) {
-            this.showPausePopup();
-        } else {
-            this.hidePausePopup();
+        // Only pause the game if the game is currently running
+        if (this.state.in_game){
+            // Toggle the game pause state
+            this.state.gamePaused = !this.state.gamePaused;
+            // Show or hide the pause popup
+            if (this.state.gamePaused) {
+                this.showPausePopup();
+            } else {
+                this.hidePausePopup();
+            }
         }
     }
 
@@ -553,9 +524,9 @@ class SeedScene extends Scene {
         const modal = document.createElement('div');
         modal.id = 'pause-popup';
         modal.innerHTML = `
-        <div class="col" style="font-family: Papyrus;">
+        <div class="col" style="font-family: Courier;">
             <h1> Game Paused</h1>
-            <p style="font-family: Times New Roman;">Press Esc to keep playing!</p>
+            <p>Press Esc to keep playing!</p>
         </div>
         `;
         document.body.appendChild(modal);
@@ -621,7 +592,7 @@ class SeedScene extends Scene {
             }
 
             this.state.score = append_string;
-            document.getElementById("score-text").innerText = "HI  " + this.state.high_score + "  " + this.state.score;
+            document.getElementById("score-text").innerText = this.state.score;
         }
     }
     
