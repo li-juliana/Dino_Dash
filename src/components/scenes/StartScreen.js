@@ -17,7 +17,7 @@ export default class StartScreen {
         this.container.id = 'start-screen';
         
         this.container.style.backgroundImage = `url(${dinoImage})`;
-        this.container.style.backgroundSize = 'contain';
+        this.container.style.backgroundSize = 'cover';
         this.container.style.backgroundRepeat = 'no-repeat';
 
         this.container.innerHTML = `
