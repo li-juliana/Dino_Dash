@@ -6,6 +6,18 @@ export default class StartScreen {
         this.startGameCallback = startGameCallback;
         this.container = document.createElement('div');
         this.container.id = 'start-screen';
+
+        // Add image
+        const imageElement = document.createElement('img');
+        imageElement.src = dinoImage;
+
+        this.container = document.createElement('div');
+        this.container.id = 'start-screen';
+        
+        this.container.style.backgroundImage = `url(${dinoImage})`;
+        this.container.style.backgroundSize = 'cover';
+        this.container.style.backgroundRepeat = 'no-repeat';
+
         this.container.innerHTML = `
         <div class="row">
             <div class="col" style="font-family: Courier; text-align: center; padding: 200px;">

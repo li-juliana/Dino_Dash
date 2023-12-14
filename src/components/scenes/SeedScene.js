@@ -35,6 +35,7 @@ class SeedScene extends Scene {
             speed: null,
             in_game: false,
             gamePaused: false,
+            spawn_rate: 70,
             score: "00000",
             score_speed: 800,
             high_score: "00000",
@@ -50,7 +51,7 @@ class SeedScene extends Scene {
 
         // Add available scenery options
         this.state.scenery_options = ["Tree1", "Tree4",  "Rock1",  "Rock2", "Grass2", "Bush1", "Flower"];
-        this.state.speed = 1;
+        this.state.speed = 0.5;
         this.createScoreboard();
 
 
@@ -263,12 +264,17 @@ class SeedScene extends Scene {
 
             var player = this.state.current_player;
             // Add obstacles to the scene
-            if (this.state.frames % 30 == 0){
-                var select = Math.floor(Math.random() * 2);
-                if (select == 0){
-                    this.loadObstacle("Bird_" + this.state.style, 0);
+            if (this.state.frames % this.state.spawn_rate == 0){
+                let select;
+                if (this.state.score < 100){
+                    select = 0;
                 } else {
+                    select = Math.floor(Math.random() * 2);
+                }
+                if (select == 0){
                     this.loadObstacle("Cactus1", 0);
+                } else {
+                    this.loadObstacle("Bird_" + this.state.style, 0);
                 }
             }
 
@@ -408,19 +414,23 @@ class SeedScene extends Scene {
         `;
 
         modal.style.cssText = `
-            position: fixed;
-            top: 40%;
-            left: 35%;
-            width: 35%;
-            height: 25%;
-            background: white;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: auto;
-            border-radius: 10px;
-            text-align: center;
-            z-index: 999;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 30%;
+        height: 30%;
+        transform: translate(-50%, -50%);
+        background: #7ec0ee;
+        color: rgba(199,252,105,1);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 10px;
+        border-width: 10px;
+        border-style: solid;
+        border-color: rgba(255,255,170,1);
+        text-align: center;
+        z-index: 999;
         `;
 
         let restart_button = document.getElementById('restart');
@@ -546,21 +556,24 @@ class SeedScene extends Scene {
         `;
 
         modal.style.cssText = `
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 50%;
-            height: 50%;
-            background: white;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 30%;
+            height: 30%;
+            transform: translate(-50%, -50%);
+            background: #7ec0ee;
+            color: rgba(199,252,105,1);
             display: flex;
             justify-content: center;
             align-items: center;
-            margin: 150px 300px;
             border-radius: 10px;
+            border-width: 10px;
+            border-style: solid;
+            border-color: rgba(255,255,170,1);
             text-align: center;
             z-index: 999;
         `;
-    
     }
 
     hidePausePopup() {
@@ -593,6 +606,12 @@ class SeedScene extends Scene {
 
             this.state.score = append_string;
             document.getElementById("score-text").innerText = this.state.score;
+            if (this.state.score > 0 && this.state.score % 100 == 0){
+                if (this.state.spawn_rate > 45){
+                    this.state.spawn_rate -= 10;
+                    console.log(this.state.spawn_rate);
+                }
+            }
         }
     }
     
