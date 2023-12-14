@@ -1,7 +1,8 @@
 // StartScreen.js
 export default class StartScreen {
-    constructor(startGameCallback) {
+    constructor(startGameCallback, selectStyleCallback) {
         this.startGameCallback = startGameCallback;
+        this.selectStyleCallback = selectStyleCallback;
         this.container = document.createElement('div');
         this.container.id = 'start-screen';
         this.container.innerHTML = `
@@ -10,19 +11,33 @@ export default class StartScreen {
                 <h1>Dino Dash</h1>
                 <p style="font-family: Arial;">No wifi? No problem! Take a trip back to the dark ages with Dino Dash. Press Enter to get started!</p>
             </div>
-            <div class="col" style="text-align: center">
-            </div>
         </div>
         `;
 
         // Apply styles
-        this.container.style.height = '100vh'; // ensures that container takes up full screen
+        this.container.style.height = '100vh'; // ensures that the container takes up the full screen
         this.container.style.backgroundColor = "#abcabc";
-        
+
         document.body.appendChild(this.container);
 
-        // Add event listener for the "Enter" key
-        document.addEventListener('keydown', this.handleKeyPress.bind(this));
+        // Add event listeners for the style buttons
+        const originalButton = document.createElement('button');
+        originalButton.innerText = 'Original';
+        originalButton.addEventListener('click', () => this.handleStyleButtonClick('Original'));
+
+        const cartoonButton = document.createElement('button');
+        cartoonButton.innerText = 'Cartoon';
+        cartoonButton.addEventListener('click', () => this.handleStyleButtonClick('Cartoon'));
+
+        const realisticButton = document.createElement('button');
+        realisticButton.innerText = 'Realistic';
+        realisticButton.addEventListener('click', () => this.handleStyleButtonClick('Realistic'));
+
+        // Add buttons to the container
+        const styleContainer = this.container.querySelector('.col');
+        styleContainer.appendChild(originalButton);
+        styleContainer.appendChild(cartoonButton);
+        styleContainer.appendChild(realisticButton);
     }
 
     hide() {
@@ -32,11 +47,10 @@ export default class StartScreen {
     show() {
         this.container.style.display = 'block';
     }
-
-    handleKeyPress(event) {
-        if (event.key === 'Enter') {
-            this.startGameCallback();
-        }
+    
+    handleStyleButtonClick(style) {
+        this.selectStyleCallback(style);
+        this.startGameCallback();
     }
 }
 

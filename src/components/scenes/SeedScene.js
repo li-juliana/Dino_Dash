@@ -469,7 +469,8 @@ class SeedScene extends Scene {
         panel_modal.id = 'score-panel';
         panel_modal.innerHTML = `
         <div class="col" style="font-family: Papyrus;">
-            <h1 id = "score-text"></h1>
+            <h2 id = "score-text"></h1>
+            <h2 id = "high-score-text"></h2>
         </div>`;
         document.body.appendChild(panel_modal);
         panel_modal.style.cssText = `
@@ -499,6 +500,8 @@ class SeedScene extends Scene {
             }
         }
         document.getElementById("score-text").innerText = this.state.score;
+        document.getElementById("high-score-text").innerText = "High Score: " + this.state.high_score;
+
     }
 
     /**
@@ -561,8 +564,8 @@ class SeedScene extends Scene {
             position: absolute;
             top: 50%;
             left: 50%;
-            width: 20%;
-            height: 20%;
+            width: 30%;
+            height: 30%;
             transform: translate(-50%, -50%);
             background: #7ec0ee;
             color: rgba(199,252,105,1);
@@ -608,13 +611,9 @@ class SeedScene extends Scene {
             }
 
             this.state.score = append_string;
-            document.getElementById("score-text").innerText = "HI  " + this.state.high_score + "  " + this.state.score;
+            document.getElementById("score-text").innerText = this.state.score;
         }
     }
-    
-
-    
 }
 
 export default SeedScene;
-

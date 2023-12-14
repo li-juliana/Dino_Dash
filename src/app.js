@@ -13,16 +13,26 @@ import * as event_handlers from './js/EventHandlers.js';
 import StartScreen from './components/scenes/StartScreen.js';
 
 /********************* Initialize Start Screen **************************/
-const startScreen = new StartScreen(startGame);
+// Function to select the character style
+const selectStyle = (style) => {
+    // Logic to handle the selected style, you can pass it to SeedScene or do something else
+    console.log(`Selected style: ${style}`);
+};
+
+// Initialize StartScreen with the callback functions
+const startScreen = new StartScreen(startGame, selectStyle);
 
 /*********************** Start Game Function ***************************/
-let scene = null; 
+let scene = null;
 
-function startGame() {
+function startGame(selectedStyle) {
     startScreen.hide();
-    scene = new SeedScene();
-    scene.startGame()    
+    scene = new SeedScene(selectedStyle);
+    scene.startGame();    
 }
+
+// Show the start screen initially
+startScreen.show();
 
 /***************** Initialize core ThreeJS components *****************/
 const camera = new PerspectiveCamera();
@@ -59,6 +69,7 @@ const onAnimationFrameHandler = (timeStamp) => {
     window.requestAnimationFrame(onAnimationFrameHandler);
 };
 window.requestAnimationFrame(onAnimationFrameHandler);
+
 /*********************** Resize Handler *******************************/
 const windowResizeHandler = () => {
     const { innerHeight, innerWidth } = window;
