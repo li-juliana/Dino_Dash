@@ -101,6 +101,27 @@ class SeedScene extends Scene {
             obstacle.scale.x = 1;
             obstacle.scale.y = 1;
             obstacle.scale.z = 1;
+
+            obstacle.position.x = Math.floor(Math.random() * 7) - 3;
+            obstacle.position.z = 175 + offset;
+            this.add(obstacle);
+            this.state.obstacles.push(obstacle);
+            if (Math.random() > 0.5){
+                let num_cluster = Math.floor(Math.random()*7)+3;
+                for (var i = 0; i < num_cluster; i++){
+                    let obj = new Cactus1();
+                    obj.scale.x = 1;
+                    obj.scale.y = 1;
+                    obj.scale.z = 1;
+                    obj.position.x = obstacle.position.x + Math.floor(Math.random()*2)+1;
+                    if (obj.position.x > -3 && obj.position.x < 3){
+                        obj.position.z = obstacle.position.z + Math.floor(Math.random()*2)+1;
+                        this.add(obj);
+                        this.state.obstacles.push(obj);
+                    }
+                }
+            }
+
         } else {
             switch(type) {
                 case "Bird_Original":
@@ -113,11 +134,12 @@ class SeedScene extends Scene {
                     obstacle = new Bird_Realistic(this);
                     break;
             }
+            obstacle.position.x = Math.floor(Math.random() * 7) - 3;
+            obstacle.position.z = 175 + offset;
+            this.add(obstacle);
+            this.state.obstacles.push(obstacle);
         }
-        obstacle.position.x = Math.floor(Math.random() * 7) - 3;
-        obstacle.position.z = 175 + offset;
-        this.add(obstacle);
-        this.state.obstacles.push(obstacle);
+       
     }
 
     /**
@@ -243,7 +265,13 @@ class SeedScene extends Scene {
     }
 
     update(timeStamp) {
-        if ((this.state.gamePaused || !this.state.in_game) || !this.state.in_game){
+        if (this.state.gamePaused){
+            if (this.state.pause_start == 0){
+                this.state.pause_start = timeStamp;
+            }
+            return;
+        }
+        else if (!this.state.in_game){
             return;
         }
         else{
@@ -288,7 +316,6 @@ class SeedScene extends Scene {
                         let restart_button = document.getElementById('restart')
                         if (restart_button != null){
                             restart_button.addEventListener('click', function() {
-                                //chrome.storage.local.set({ 'high_score': counter }, {})
                                 parent.window.location.reload(true);
                             }, false);
                         }
@@ -375,6 +402,10 @@ class SeedScene extends Scene {
             const max_vec_p = new THREE.Vector3(player_box.max.x + player_pos.x, player_box.max.y + player_pos.y, player_box.max.z + player_pos.z);
             const min_vec_o = new THREE.Vector3(-offset_amount_bird.x + object_pos.x, -offset_amount_bird.y + object_pos.y, -offset_amount_bird.z + object_pos.z);
             const max_vec_o = new THREE.Vector3(offset_amount_bird.x + object_pos.x, offset_amount_bird.y + object_pos.y, offset_amount_bird.z + object_pos.z);
+            if (this.checkBoxIntersect(min_vec_p, max_vec_p, min_vec_o, max_vec_o)){
+                console.log(player_pos)
+                console.log(obstacle.position)
+            }
             return this.checkBoxIntersect(min_vec_p, max_vec_p, min_vec_o, max_vec_o);
 
         }
@@ -620,4 +651,3 @@ class SeedScene extends Scene {
 }
 
 export default SeedScene;
-
