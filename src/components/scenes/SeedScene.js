@@ -23,7 +23,6 @@ class SeedScene extends Scene {
             rotationSpeed: 0, // TODO: change back to 1 later
             updateList: [],
             prev_timestamp: null,
-            in_game: true,
             style: "Original",
             current_style: "Original",
             player_options: [],
@@ -34,11 +33,13 @@ class SeedScene extends Scene {
             scenery_options: null,
             clouds: [],
             speed: null,
+            in_game: false,
             gamePaused: false,
-            gameStarted: false,
             score: "00000",
             score_speed: 800,
-            high_score: "00000"
+            high_score: "00000",
+            start_adj: 0,
+            pause_start: 0
         };
 
         // Populate GUI
@@ -92,6 +93,7 @@ class SeedScene extends Scene {
         const bird_cartoon = new Bird_Cartoon(this);
         const bird_realistic = new Bird_Realistic(this);
         this.state.obstacle_options.push(bird_original, bird_cartoon, bird_realistic);
+
         // Add event listener for the "keydown" event to detect "Esc" key
         document.addEventListener('keydown', this.handleKeyDown.bind(this));
     }
@@ -245,10 +247,17 @@ class SeedScene extends Scene {
     }
 
     update(timeStamp) {
-        if ((this.state.gamePaused || !this.state.gameStarted) || !this.state.in_game){
+        if ((this.state.gamePaused || !this.state.in_game) || !this.state.in_game){
             return;
         }
         else{
+            if (this.state.start_adj == 0){
+                this.state.start_adj = timeStamp;
+            }
+            if (this.state.pause_start != 0){
+                this.state.start_adj += timeStamp-this.state.pause_start;
+                this.state.pause_start = 0;
+            }
             const { rotationSpeed, updateList } = this.state;
             this.state.frames += 1;
             this.rotation.y = (rotationSpeed * timeStamp) / 10000;
@@ -313,10 +322,10 @@ class SeedScene extends Scene {
             this.loadNewScenery(this.state.scenery_right, "scenery", "right", 50);
 
             /*********** Update the score displayed **********/
-            this.updateScore(timeStamp);
+            this.updateScore((timeStamp-this.state.start_adj));
             // changes the score speed to increase at a slower rate the longer the
             // game is played
-            this.state.score_speed = 800 + (timeStamp/1000);
+            this.state.score_speed = 800 + ((timeStamp-this.state.start_adj)/1000);
         }
     }
 
@@ -418,7 +427,7 @@ class SeedScene extends Scene {
         modal.innerHTML = `
         <div class="col" style="font-family: Papyrus;">
             <h1> Game Over</h1>
-            <button id="restart"><img src=""></button>
+            <button id="restart">Try Again!</button>
         </div>`;
         document.body.appendChild(modal);
 
@@ -438,19 +447,27 @@ class SeedScene extends Scene {
 
         modal.style.cssText = `
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 40%;
-            height: 30%;
+            top: 40%;
+            left: 35%;
+            width: 35%;
+            height: 25%;
             background: white;
             display: flex;
             justify-content: center;
             align-items: center;
-            margin: 150px 300px;
+            margin: auto;
             border-radius: 10px;
             text-align: center;
             z-index: 999;
         `;
+
+        let restart_button = document.getElementById('restart');
+        restart_button.style.cssText = `
+            width: 50%;
+            height: 30%;
+            font-family: Papyrus;
+            `;
+
         if (Number(this.state.score) > this.state.high_score){
             window.localStorage.setItem("high_score", Number(this.state.score));
         }
@@ -498,14 +515,14 @@ class SeedScene extends Scene {
                 this.state.high_score = append_string;
             }
         }
-        document.getElementById("score-text").innerText = this.state.score;
+        document.getElementById("score-text").innerText = "HI  " + this.state.high_score + "  " + this.state.score;;
     }
 
     /**
-     * Start the game by setting the gameStarted flag to true.
+     * Start the game by setting the in_game flag to true.
      */
     startGame() {
-        this.state.gameStarted = true;
+        this.state.in_game = true;
     }
 
     handleKeyDown(event) {
