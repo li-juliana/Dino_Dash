@@ -16,6 +16,8 @@ class SeedScene extends Scene {
         // Call parent Scene() constructor
         super();
 
+        this.counter = 0;
+
         // Init state of game
         this.state = {
             frames: 0,
@@ -96,6 +98,18 @@ class SeedScene extends Scene {
 
     loadObstacle(type, offset){
         let obstacle;
+        if (this.counter == 0){
+            obstacle = new Cactus1();
+            obstacle.scale.x = 1;
+            obstacle.scale.y = 1;
+            obstacle.scale.z = 1;
+            this.counter = 1;
+            obstacle.position.x = 0;
+            obstacle.position.z = 30;
+            this.add(obstacle);
+            this.state.obstacles.push(obstacle);
+            return;
+        }
         if (type == "Cactus1"){
             obstacle = new Cactus1();
             obstacle.scale.x = 1;
@@ -292,6 +306,7 @@ class SeedScene extends Scene {
 
             var player = this.state.current_player;
             // Add obstacles to the scene
+            
             if (this.state.frames % this.state.spawn_rate == 0){
                 let select;
                 if (this.state.score < 100){
@@ -381,6 +396,10 @@ class SeedScene extends Scene {
             return false;
         }
         else{
+            console.log(min1)
+            console.log(max1)
+            console.log(min2)
+            console.log(max2)
             return true;
         }
     }
@@ -395,13 +414,21 @@ class SeedScene extends Scene {
     detectCollision(player, obstacle){
         const player_box = player.state.box;
         const player_pos = player.position;
-        const offset_amount_bird = {x: 0.7, y:0.1, z:0.1};
+        const offset_amount = {x_min:0, y_min:0, z_min:0, x_max: 0, y_max: 0, z_max: 0};
+        // const offset_amount_bird = {x: 0.7, y:0.1, z:0.1};
+        if (obstacle.name == "Cactus1"){
+            offset_amount.x_min = 0.3;
+            offset_amount.x_max = 0.3;
+        }
+
         if (player_box != null && player_pos != null){
             const object_pos = obstacle.position;
-            const min_vec_p = new THREE.Vector3(player_box.min.x + player_pos.x, player_box.min.y + player_pos.y, player_box.min.z + player_pos.z);
-            const max_vec_p = new THREE.Vector3(player_box.max.x + player_pos.x, player_box.max.y + player_pos.y, player_box.max.z + player_pos.z);
-            const min_vec_o = new THREE.Vector3(-offset_amount_bird.x + object_pos.x, -offset_amount_bird.y + object_pos.y, -offset_amount_bird.z + object_pos.z);
-            const max_vec_o = new THREE.Vector3(offset_amount_bird.x + object_pos.x, offset_amount_bird.y + object_pos.y, offset_amount_bird.z + object_pos.z);
+            const min_vec_p = new THREE.Vector3(player_box.min.x + player_pos.x, player_pos.y+2, player_box.min.z + player_pos.z);
+            console.log(min_vec_p)
+            console.log(obstacle.position)
+            const max_vec_p = new THREE.Vector3(player_box.max.x + player_pos.x, player_pos.y-0.3, player_box.max.z + player_pos.z);
+            const min_vec_o = new THREE.Vector3(-offset_amount.x_min + object_pos.x, -offset_amount.y_min + object_pos.y, -offset_amount.z_min + object_pos.z);
+            const max_vec_o = new THREE.Vector3(offset_amount.x_max + object_pos.x, offset_amount.y_max + object_pos.y, offset_amount.z_max + object_pos.z);
             return this.checkBoxIntersect(min_vec_p, max_vec_p, min_vec_o, max_vec_o);
 
         }
