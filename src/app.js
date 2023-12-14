@@ -32,26 +32,28 @@ const renderer = new WebGLRenderer({ antialias: true });
 camera.position.set(-3, 3, -10);
 camera.lookAt(new Vector3(0, 0, 5));
 function handleKeyDown(event){
-    if (scene.state.in_game){
-        if (event.key == "1"){
-            camera.position.set(-3, 3, -10);
-            camera.lookAt(new Vector3(0, 0, 5));
-        }
-        else if(event.key == "2"){
-            camera.position.set(0, 3, -10);
-            camera.lookAt(new Vector3(0, 0, 5));
-        }
-        else if(event.key == "3"){
-            camera.position.set(0, 2, -5);
-            camera.lookAt(new Vector3(0, 0, 100));
-        }
-        else if(event.key == "4"){
-            camera.position.set(0, 40, -5);
-            camera.lookAt(new Vector3(0, 0, -5));
-        }
-        else if (event.key == "5"){
-            camera.position.set(10, 3, -5);
-            camera.lookAt(new Vector3(-20, 3, -5));
+    if (scene){
+        if (scene.state.in_game){
+            if (event.key == "1"){
+                camera.position.set(-3, 3, -10);
+                camera.lookAt(new Vector3(0, 0, 5));
+            }
+            else if(event.key == "2"){
+                camera.position.set(0, 3, -10);
+                camera.lookAt(new Vector3(0, 0, 5));
+            }
+            else if(event.key == "3"){
+                camera.position.set(0, 2, -5);
+                camera.lookAt(new Vector3(0, 0, 100));
+            }
+            else if(event.key == "4"){
+                camera.position.set(0, 40, -5);
+                camera.lookAt(new Vector3(0, 0, -5));
+            }
+            else if (event.key == "5"){
+                camera.position.set(10, 3, -5);
+                camera.lookAt(new Vector3(-20, 3, -5));
+            }
         }
     }
 }
