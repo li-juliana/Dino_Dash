@@ -101,13 +101,26 @@ class SeedScene extends Scene {
             obstacle.scale.y = 1;
             obstacle.scale.z = 1;
 
-            if (Math.random() > 0.5){
-            }
-            else{
-
-            }
             obstacle.position.x = Math.floor(Math.random() * 7) - 3;
             obstacle.position.z = 175 + offset;
+            this.add(obstacle);
+            this.state.obstacles.push(obstacle);
+            if (Math.random() > 0.5){
+                let num_cluster = Math.floor(Math.random()*7)+3;
+                for (var i = 0; i < num_cluster; i++){
+                    let obj = new Cactus1();
+                    obj.scale.x = 1;
+                    obj.scale.y = 1;
+                    obj.scale.z = 1;
+                    obj.position.x = obstacle.position.x + Math.floor(Math.random()*2)+1;
+                    if (obj.position.x > -3 && obj.position.x < 3){
+                        obj.position.z = obstacle.position.z + Math.floor(Math.random()*2)+1;
+                        this.add(obj);
+                        this.state.obstacles.push(obj);
+                    }
+                }
+            }
+
         } else {
             switch(type) {
                 case "Bird_Original":
@@ -122,10 +135,10 @@ class SeedScene extends Scene {
             }
             obstacle.position.x = Math.floor(Math.random() * 7) - 3;
             obstacle.position.z = 175 + offset;
+            this.add(obstacle);
+            this.state.obstacles.push(obstacle);
         }
        
-        this.add(obstacle);
-        this.state.obstacles.push(obstacle);
     }
 
     /**
