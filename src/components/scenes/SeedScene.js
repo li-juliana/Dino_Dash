@@ -35,6 +35,7 @@ class SeedScene extends Scene {
             speed: null,
             in_game: false,
             gamePaused: false,
+            spawn_rate: 70,
             score: "00000",
             score_speed: 800,
             high_score: "00000",
@@ -263,9 +264,9 @@ class SeedScene extends Scene {
 
             var player = this.state.current_player;
             // Add obstacles to the scene
-            if (this.state.frames % 30 == 0){
+            if (this.state.frames % this.state.spawn_rate == 0){
                 let select;
-                if (this.state.score < 50){
+                if (this.state.score < 100){
                     select = 0;
                 } else {
                     select = Math.floor(Math.random() * 2);
@@ -598,6 +599,12 @@ class SeedScene extends Scene {
 
             this.state.score = append_string;
             document.getElementById("score-text").innerText = this.state.score;
+            if (this.state.score > 0 && this.state.score % 100 == 0){
+                if (this.state.spawn_rate > 45){
+                    this.state.spawn_rate -= 10;
+                    console.log(this.state.spawn_rate);
+                }
+            }
         }
     }
     
