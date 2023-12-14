@@ -1,13 +1,25 @@
+import dinoImage from './dinotest.jpg';
+
 // StartScreen.js
 export default class StartScreen {
     constructor(startGameCallback, selectStyleCallback) {
         this.startGameCallback = startGameCallback;
         this.selectStyleCallback = selectStyleCallback;
+        // add image
+        const imageElement = document.createElement('img');
+        imageElement.src = dinoImage;
+
         this.container = document.createElement('div');
         this.container.id = 'start-screen';
+        
+        this.container.style.backgroundImage = `url(${dinoImage})`;
+        this.container.style.backgroundSize = 'cover';
+        this.container.style.backgroundRepeat = 'no-repeat';
+
+        // this.container.backgroundImage = imageElement.src;
         this.container.innerHTML = `
         <div class="row">
-            <div class="col" style="font-family: Papyrus; text-align: center; padding: 200px;">
+            <div class="col" style="font-family: Papyrus; text-align: center; padding: 200px; ">
                 <h1>Dino Dash</h1>
                 <p style="font-family: Arial;">No wifi? No problem! Take a trip back to the dark ages with Dino Dash. Press Enter to get started!</p>
             </div>
@@ -16,9 +28,11 @@ export default class StartScreen {
 
         // Apply styles
         this.container.style.height = '100vh'; // ensures that the container takes up the full screen
-        this.container.style.backgroundColor = "#abcabc";
 
         document.body.appendChild(this.container);
+        //document.body.appendChild(imageElement);
+
+         
 
         // Add event listeners for the style buttons
         const originalButton = document.createElement('button');
