@@ -16,9 +16,6 @@ class SeedScene extends Scene {
         // Call parent Scene() constructor
         super();
 
-        this.gameStarted = false;
-        this.gamePaused = false;
-
         // Init state of game
         this.state = {
             frames: 0,
@@ -37,7 +34,8 @@ class SeedScene extends Scene {
             scenery_options: null,
             clouds: [],
             speed: null,
-            paused: false,
+            gamePaused: false,
+            gameStarted: false,
             score: "00000",
             score_speed: 800,
             high_score: "00000"
@@ -247,7 +245,7 @@ class SeedScene extends Scene {
     }
 
     update(timeStamp) {
-        if (this.state.paused || !this.gameStarted){
+        if ((this.state.gamePaused || !this.state.gameStarted) || !this.state.in_game){
             return;
         }
         else{
@@ -507,7 +505,7 @@ class SeedScene extends Scene {
      * Start the game by setting the gameStarted flag to true.
      */
     startGame() {
-        this.gameStarted = true;
+        this.state.gameStarted = true;
     }
 
     handleKeyDown(event) {
@@ -518,10 +516,10 @@ class SeedScene extends Scene {
 
     togglePause() {
         // Toggle the game pause state
-        this.gamePaused = !this.gamePaused;
+        this.state.gamePaused = !this.state.gamePaused;
 
         // Show/hide the pause popup
-        if (this.gamePaused) {
+        if (this.state.gamePaused) {
             this.showPausePopup();
         } else {
             this.hidePausePopup();
