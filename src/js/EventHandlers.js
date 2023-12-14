@@ -100,12 +100,20 @@ export function handleMovement(scene){
     if(keys.left.pressed && !scene.state.gamePaused){
         // Only move left if still on the land
         if (player.position.x + 0.05 <= land.scale.x + offset){
-            player.position.x += 0.05;   
+            if (scene.state.style == "Realistic"){
+                player.position.x += 0.1
+            } else {
+                player.position.x += 0.05;
+            }
         }
     } else if (keys.right.pressed && !scene.state.gamePaused){
         // Only move right if still on the land
         if (player.position.x - 0.05 >= -1 * land.scale.x - offset){
-            player.position.x -= 0.05;   
+            if (scene.state.style == "Realistic"){
+                player.position.x -= 0.1
+            } else {
+                player.position.x -= 0.05;
+            } 
         }
     } 
     

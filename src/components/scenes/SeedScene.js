@@ -24,6 +24,7 @@ class SeedScene extends Scene {
             updateList: [],
             prev_timestamp: null,
             style: style,
+            current_player: null,
             player_options: [],
             obstacle_options: [],
             obstacles: [],
@@ -260,7 +261,7 @@ class SeedScene extends Scene {
                 obj.update(timeStamp);
             }
 
-            var player = this.getObjectByName("Trex_" + this.state.style);
+            var player = this.state.current_player;
             // Add obstacles to the scene
             if (this.state.frames % 30 == 0){
                 var select = Math.floor(Math.random() * 2);
@@ -330,6 +331,7 @@ class SeedScene extends Scene {
         this.state.player_options.forEach(element => {
             if (element.name == desired_player){
                 this.add(element);
+                this.state.current_player = element;
             }
         });
     }
@@ -499,13 +501,16 @@ class SeedScene extends Scene {
     }
 
     togglePause() {
-        // Toggle the game pause state
-        this.state.gamePaused = !this.state.gamePaused;
-        // Show/hide the pause popup
-        if (this.state.gamePaused) {
-            this.showPausePopup();
-        } else {
-            this.hidePausePopup();
+        // Only pause the game if the game is currently running
+        if (this.state.in_game){
+            // Toggle the game pause state
+            this.state.gamePaused = !this.state.gamePaused;
+            // Show or hide the pause popup
+            if (this.state.gamePaused) {
+                this.showPausePopup();
+            } else {
+                this.hidePausePopup();
+            }
         }
     }
 
