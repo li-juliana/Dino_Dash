@@ -31,9 +31,9 @@ class Bird_Realistic extends Group {
         });
 
         // Adjust size of bird
-        this.scale.x = 0.2;
-        this.scale.y = 0.2;
-        this.scale.z = 0.2;
+        this.scale.x = 0.15;
+        this.scale.y = 0.15;
+        this.scale.z = 0.15;
 
         // TODO: Fix positioning
         this.position.z = 5;
