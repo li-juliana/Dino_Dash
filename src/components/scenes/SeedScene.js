@@ -92,6 +92,8 @@ class SeedScene extends Scene {
         const bird_cartoon = new Bird_Cartoon(this);
         const bird_realistic = new Bird_Realistic(this);
         this.state.obstacle_options.push(bird_original, bird_cartoon, bird_realistic);
+
+        document.addEventListener('keydown', this.handleKeyDown.bind(this));
     }
 
     loadObstacle(type, offset){
@@ -507,7 +509,7 @@ class SeedScene extends Scene {
                 this.state.high_score = append_string;
             }
         }
-        document.getElementById("score-text").innerText = this.state.score;
+        document.getElementById("score-text").innerText = "HI  " + this.state.high_score + "  " + this.state.score;;
     }
 
     /**
