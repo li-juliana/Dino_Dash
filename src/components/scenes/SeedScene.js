@@ -103,14 +103,14 @@ class SeedScene extends Scene {
             this.add(obstacle);
             this.state.obstacles.push(obstacle);
             if (Math.random() > 0.5){
-                let num_cluster = Math.floor(Math.random()*7)+3;
+                let num_cluster = Math.floor(Math.random()*10)+3;
                 for (var i = 0; i < num_cluster; i++){
                     let obj = new Cactus1();
                     obj.scale.x = 1;
                     obj.scale.y = 1;
                     obj.scale.z = 1;
-                    obj.position.x = obstacle.position.x + Math.floor(Math.random()*2)+1;
-                    if (obj.position.x > -3 && obj.position.x < 3){
+                    obj.position.x = obstacle.position.x + Math.floor(Math.random()*4)+1;
+                    if (obj.position.x > -4 && obj.position.x < 4){
                         obj.position.z = obstacle.position.z + Math.floor(Math.random()*2)+1;
                         this.add(obj);
                         this.state.obstacles.push(obj);
@@ -487,9 +487,16 @@ class SeedScene extends Scene {
 
         let restart_button = document.getElementById('restart');
         restart_button.style.cssText = `
-            width: 50%;
-            height: 30%;
-            font-family: Courier;
+        background-color: #C7FC69;
+        border-width: 5px;
+        font-family: Courier;
+        border-radius:10px;
+        color: #7EC0EE;
+        padding: 10px 25px;
+        text-align: center;
+        font-size: 16px;
+        border-color: #FFFFAA;
+        font-weight: bold;
             `;
 
         if (Number(this.state.score) > this.state.high_score){
@@ -509,7 +516,7 @@ class SeedScene extends Scene {
         panel_modal.id = 'score-panel';
         panel_modal.innerHTML = `
         <div class="col" style="font-family: Courier;">
-            <h2 id = "score-text" style="color:#36454F"></h2>
+            <h2 id = "score-text" style="color:#36454F;"></h2>
             <h2 id = "high-score-text" style="color:#36454F"></h2>
         </div>`;
         document.body.appendChild(panel_modal);
@@ -599,6 +606,19 @@ class SeedScene extends Scene {
                 parent.window.location.reload(true);
             }, false);
         }
+
+        returnHome.style.cssText = `
+        background-color: #C7FC69;
+        border-width: 5px;
+        font-family: Courier;
+        border-radius:10px;
+        color: #7EC0EE;
+        padding: 10px 25px;
+        text-align: center;
+        font-size: 16px;
+        border-color: #FFFFAA;
+        font-weight: bold;
+        `
 
         // Add styles
         overlay.style.cssText = `
