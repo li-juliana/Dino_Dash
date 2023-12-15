@@ -19,31 +19,31 @@ export default class StartScreen {
         this.container.style.backgroundImage = `url(${dinoImage})`;
         this.container.style.backgroundSize = 'cover';
         this.container.style.backgroundRepeat = 'no-repeat';
+        this.container.style.backgroundPosition = 'fixed';
 
         this.container.innerHTML = `
-        <div class="row" style="max-width: 700px;">
-            <div class="col" id="title" style="font-family: Courier; text-align: left; position: absolute; top: 20px; left: 20px; max-width: 300px; color: white;">
-                <h2 style="font-size: 50px">Dino Dash</h2>
-                <h3 style="font-size: 20px">No wifi? No problem! Travel back to the Dark Ages with Dino Dash.</h3>
+        <div class="row" style="max-width: 70vw;">
+            <div class="col" id="title" style="font-family: Courier; text-align: left; position: fixed; top: 0vw; left: 2vw; max-width: 25vw; color: #e4e4e4;">
+                <h2 style="font-size: 3vw">Dino Dash</h2>
             </div>
-            <div class="col" id="instructions" style="font-family: Courier; text-align: center; position: absolute; bottom: 30px; left: 20px; max-width: 430px; color: white;">
-                <h2 style="font-size: 30px">How to play:</h2>
+            <div class="col" id="instructions" style="font-family: Courier; text-align: left; position: fixed; bottom: 0vw; left: 2vw; max-width: 28vw; color: #e4e4e4;">
+                <h2 style="font-size: 2vw">How to Play:</h2>
                 <hr>
-                <h3>
-                    1) Use a or d keys or the left and right arrow keys to move left and right
+                <h3 style="font-size: 1.25vw">
+                    1) Use A/D keys or the Left/Right arrow keys to move left and right.
                     <br>
                     <br>
-                    2) Use the spacebar or the up arrow to jump up
+                    2) Use the spacebar or the up arrow to jump up.
                     <br>
                     <br>
-                    3) Avoid obstacles. There will be more obstacles as the game continues
+                    3) Avoid obstacles! There will be more obstacles as the game continues.
                     <br>
                     <br>
-                    4) The game ends when you hit an obstacle
+                    4) The game ends when you hit an obstacle.
                     <br>
                     <br>
                 </h3>
-                <h3> Select a player to get started! </h3>
+                <h3 style="font-size: 1vw"> Select a player to get started! </h3>
             </div>
         </div>
         `;
