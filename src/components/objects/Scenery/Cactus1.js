@@ -10,7 +10,8 @@ class Cactus1 extends Group {
         const loader = new GLTFLoader();
 
         this.name = 'Cactus1';
-
+        // Model by Quaternius and found at Quaternius.com is licensed under 
+        // Creative Commons Attribution
         loader.load(MODEL, (gltf) => {
             this.add(gltf.scene);
         });

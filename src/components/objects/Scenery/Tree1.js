@@ -10,7 +10,8 @@ class Tree1 extends Group {
         const loader = new GLTFLoader();
 
         this.name = 'Tree1';
-
+        // Model by Quaternius and found at Quaternius.com is licensed under 
+        // Creative Commons Attribution
         loader.load(MODEL, (gltf) => {
             this.add(gltf.scene);
         });

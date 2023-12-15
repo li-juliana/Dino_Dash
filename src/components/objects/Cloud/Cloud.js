@@ -11,6 +11,8 @@ class Cloud extends Group {
 
         this.name = 'Cloud';
 
+        // Model by Jiří Kuba and found at Sketchfab is licensed under 
+        // Creative Commons Attribution
         loader.load(MODEL, (gltf) => {
             this.add(gltf.scene);
         });

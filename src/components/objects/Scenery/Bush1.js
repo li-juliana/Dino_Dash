@@ -11,6 +11,8 @@ class Bush1 extends Group {
 
         this.name = 'Bush1';
 
+        // Model by Quaternius and found at Quaternius.com is licensed under 
+        // Creative Commons Attribution
         loader.load(MODEL, (gltf) => {
             this.add(gltf.scene);
         });

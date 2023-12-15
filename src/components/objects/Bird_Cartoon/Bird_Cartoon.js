@@ -3,7 +3,6 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import MODEL from './Bird_Cartoon.glb';
 
 class Bird_Cartoon extends Group {
-    // CODE BASED OFF OF FLOWER CODE. NEED TO MODIFY
     constructor(parent) {
         // Call parent Group() constructor
         super();
@@ -18,6 +17,7 @@ class Bird_Cartoon extends Group {
 
         // Load object
         const loader = new GLTFLoader();
+        // Model from THREE.js
         loader.load(MODEL, (gltf) => {
             this.add(gltf.scene);
             const mixer = new AnimationMixer(gltf.scene);
