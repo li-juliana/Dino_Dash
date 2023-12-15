@@ -25,7 +25,6 @@ export default class StartScreen {
         <div class="row" style="max-width: 70vw;">
             <div class="col" id="title" style="font-family: Courier; text-align: left; position: fixed; top: 0vw; left: 2vw; max-width: 25vw; color: #e4e4e4;">
                 <h2 style="font-size: 3vw">Dino Dash</h2>
-                <h3 style="font-size: 1.5vw">No wifi? No problem! Travel back to the Dark Ages with Dino Dash.</h3>
             </div>
             <div class="col" id="instructions" style="font-family: Courier; text-align: left; position: fixed; bottom: 0vw; left: 2vw; max-width: 28vw; color: #e4e4e4;">
                 <h2 style="font-size: 2vw">How to Play:</h2>
