@@ -16,7 +16,6 @@ class SeedScene extends Scene {
         // Call parent Scene() constructor
         super();
 
-        this.count = 0;
         // Init state of game
         this.state = {
             frames: 0,
@@ -294,20 +293,6 @@ class SeedScene extends Scene {
                     select = 0;
                 } else {
                     select = Math.floor(Math.random() * 2);
-                }
-                if (this.count == 0)
-                {
-                    let obstacle = new Bird_Realistic(this);
-                    //let obstacle = new Cactus1();
-                    //obstacle.scale.x = 1;
-                    //obstacle.scale.y = 1;
-                    //obstacle.scale.z = 1;
-
-                    obstacle.position.x = 0;
-                    obstacle.position.z = 40;
-                    this.add(obstacle);
-                    this.state.obstacles.push(obstacle);
-                    this.count = 1
                 }
                 if (select == 0){
                     this.loadObstacle("Cactus1", 0);
