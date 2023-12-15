@@ -1,5 +1,5 @@
 # COS 426 Final Project
-To see it running live on the web, check out the [Online Demo](https://li-juliana.github.io/COS426_finalproject/)
+To see it running live on the web, check out the [Online Demo](https://li-juliana.github.io/Dino_Dash/)
 
 Check out our [video demo](https://drive.google.com/file/d/1Q9oYK_Dx8ioquW5R7Yc9QVC9-lWfmLSX/view?usp=drive_link)
 
