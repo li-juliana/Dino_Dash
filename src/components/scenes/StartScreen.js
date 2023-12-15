@@ -64,7 +64,7 @@ export default class StartScreen {
         font-family: Courier;
         border-radius:10px;
         color: white;
-        padding: 10px 25px;
+        padding: 10px 10px;
         text-align: center;
         font-size: 16px;
         border-color: #818B6D;
@@ -81,7 +81,7 @@ export default class StartScreen {
         font-family: Courier;
         border-radius:10px;
         color: white;
-        padding: 10px 25px;
+        padding: 10px 10px;
         text-align: center;
         font-size: 16px;
         border-color: #818B6D;
@@ -98,7 +98,7 @@ export default class StartScreen {
         font-family: Courier;
         border-radius:10px;
         color: white;
-        padding: 10px 25px;
+        padding: 10px 10px;
         text-align: center;
         font-size: 16px;
         border-color: #818B6D;

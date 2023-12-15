@@ -516,7 +516,7 @@ class SeedScene extends Scene {
         panel_modal.id = 'score-panel';
         panel_modal.innerHTML = `
         <div class="col" style="font-family: Courier;">
-            <h2 id = "score-text" style="color:#36454F"></h2>
+            <h2 id = "score-text" style="color:#36454F;"></h2>
             <h2 id = "high-score-text" style="color:#36454F"></h2>
         </div>`;
         document.body.appendChild(panel_modal);
