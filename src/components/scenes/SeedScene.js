@@ -103,14 +103,14 @@ class SeedScene extends Scene {
             this.add(obstacle);
             this.state.obstacles.push(obstacle);
             if (Math.random() > 0.5){
-                let num_cluster = Math.floor(Math.random()*7)+3;
+                let num_cluster = Math.floor(Math.random()*10)+3;
                 for (var i = 0; i < num_cluster; i++){
                     let obj = new Cactus1();
                     obj.scale.x = 1;
                     obj.scale.y = 1;
                     obj.scale.z = 1;
-                    obj.position.x = obstacle.position.x + Math.floor(Math.random()*2)+1;
-                    if (obj.position.x > -3 && obj.position.x < 3){
+                    obj.position.x = obstacle.position.x + Math.floor(Math.random()*4)+1;
+                    if (obj.position.x > -4 && obj.position.x < 4){
                         obj.position.z = obstacle.position.z + Math.floor(Math.random()*2)+1;
                         this.add(obj);
                         this.state.obstacles.push(obj);
