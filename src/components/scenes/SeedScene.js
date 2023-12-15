@@ -496,6 +496,7 @@ class SeedScene extends Scene {
         text-align: center;
         font-size: 16px;
         border-color: #FFFFAA;
+        font-weight: bold;
             `;
 
         if (Number(this.state.score) > this.state.high_score){
@@ -616,6 +617,7 @@ class SeedScene extends Scene {
         text-align: center;
         font-size: 16px;
         border-color: #FFFFAA;
+        font-weight: bold;
         `
 
         // Add styles

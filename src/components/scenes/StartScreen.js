@@ -68,6 +68,7 @@ export default class StartScreen {
         text-align: center;
         font-size: 16px;
         border-color: #818B6D;
+        font-weight: bold;
         `;
         originalButton.style.margin = '5px';
         originalButton.addEventListener('click', () => this.handleStyleButtonClick('Original'));
@@ -84,6 +85,7 @@ export default class StartScreen {
         text-align: center;
         font-size: 16px;
         border-color: #818B6D;
+        font-weight: bold;
         `;
         cartoonButton.style.margin = '5px';
         cartoonButton.addEventListener('click', () => this.handleStyleButtonClick('Cartoon'));
@@ -100,6 +102,7 @@ export default class StartScreen {
         text-align: center;
         font-size: 16px;
         border-color: #818B6D;
+        font-weight: bold;
         `;
         realisticButton.style.margin = '5px';
         realisticButton.addEventListener('click', () => this.handleStyleButtonClick('Realistic'));
