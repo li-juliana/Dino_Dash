@@ -43,6 +43,7 @@ export function handleKeyDown(event){
             break;
         // Jump
         case 'ArrowUp':
+        case 'KeyW':
             keys.jump.pressed = true;
             break;
         case 'Space':
@@ -74,6 +75,7 @@ export function handleKeyUp(event){
             break;
         // Jump
         case 'ArrowUp':
+        case 'KeyW':
             keys.jump.pressed = false;
             break;
         case 'Space':
