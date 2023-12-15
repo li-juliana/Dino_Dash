@@ -487,9 +487,15 @@ class SeedScene extends Scene {
 
         let restart_button = document.getElementById('restart');
         restart_button.style.cssText = `
-            width: 50%;
-            height: 30%;
-            font-family: Courier;
+        background-color: #C7FC69;
+        border-width: 5px;
+        font-family: Courier;
+        border-radius:10px;
+        color: #7EC0EE;
+        padding: 10px 25px;
+        text-align: center;
+        font-size: 16px;
+        border-color: #FFFFAA;
             `;
 
         if (Number(this.state.score) > this.state.high_score){
@@ -599,6 +605,18 @@ class SeedScene extends Scene {
                 parent.window.location.reload(true);
             }, false);
         }
+
+        returnHome.style.cssText = `
+        background-color: #C7FC69;
+        border-width: 5px;
+        font-family: Courier;
+        border-radius:10px;
+        color: #7EC0EE;
+        padding: 10px 25px;
+        text-align: center;
+        font-size: 16px;
+        border-color: #FFFFAA;
+        `
 
         // Add styles
         overlay.style.cssText = `

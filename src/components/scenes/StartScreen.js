@@ -43,7 +43,8 @@ export default class StartScreen {
                     <br>
                     <br>
                 </h3>
-                <h3 style="font-size: 1vw"> Select a player to get started! </h3>
+                <h3 style="font-size: 1.25vw"> Select a player to get started! </h3>
+                
             </div>
         </div>
         `;
@@ -57,17 +58,50 @@ export default class StartScreen {
         // Add event listeners for the style buttons
         const originalButton = document.createElement('button');
         originalButton.innerText = 'Original';
-        originalButton.style.margin = '20px';
+        originalButton.style.cssText = `
+        background-color: #A3BDA2;
+        border-width: 5px;
+        font-family: Courier;
+        border-radius:10px;
+        color: white;
+        padding: 10px 25px;
+        text-align: center;
+        font-size: 16px;
+        border-color: #818B6D;
+        `;
+        originalButton.style.margin = '5px';
         originalButton.addEventListener('click', () => this.handleStyleButtonClick('Original'));
 
         const cartoonButton = document.createElement('button');
         cartoonButton.innerText = 'Cartoon';
-        cartoonButton.style.margin = '20px';
+        cartoonButton.style.cssText = `
+        background-color: #A3BDA2;
+        border-width: 5px;
+        font-family: Courier;
+        border-radius:10px;
+        color: white;
+        padding: 10px 25px;
+        text-align: center;
+        font-size: 16px;
+        border-color: #818B6D;
+        `;
+        cartoonButton.style.margin = '5px';
         cartoonButton.addEventListener('click', () => this.handleStyleButtonClick('Cartoon'));
 
         const realisticButton = document.createElement('button');
         realisticButton.innerText = 'Realistic';
-        realisticButton.style.margin = '20px';
+        realisticButton.style.cssText = `
+        background-color: #A3BDA2;
+        border-width: 5px;
+        font-family: Courier;
+        border-radius:10px;
+        color: white;
+        padding: 10px 25px;
+        text-align: center;
+        font-size: 16px;
+        border-color: #818B6D;
+        `;
+        realisticButton.style.margin = '5px';
         realisticButton.addEventListener('click', () => this.handleStyleButtonClick('Realistic'));
 
         // Add buttons to the container
